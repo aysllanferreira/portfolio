@@ -43,17 +43,14 @@ for (const target of targets) {
       );
     });
 
-    // Isolated design nodes are exported without the section background behind them.
+    // Isolated design nodes are exported without the section background behind them;
+    // section frames include it, and test render mode freezes the shader to compare it.
     if (target.designBox) {
       await page.addStyleTag({ content: "[data-shader-state] canvas { visibility: hidden; }" });
     }
 
     const capture = await page.locator(target.selector).screenshot({
       animations: "disabled",
-      // Section frames include the animated shader, which is masked out of the comparison.
-      ...(target.designBox
-        ? {}
-        : { mask: [page.locator("[data-shader-state]")], maskColor: "#0A0A0F" }),
     });
     writeFileSync(resolve(root, "actual", `${target.name}.png`), capture);
 

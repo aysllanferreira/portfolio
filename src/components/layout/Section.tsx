@@ -20,6 +20,8 @@ interface SectionProps {
   decoration?: ReactNode;
   /** Lets the shader continue under the footer, which the design draws inside the last section. */
   extendBackgroundBelow?: boolean;
+  /** The hero has no top boundary line; every other section does. */
+  hairline?: boolean;
 }
 
 /** A page section: animated background, top hairline and the centered content column. */
@@ -32,13 +34,15 @@ export function Section({
   containerClassName,
   decoration,
   extendBackgroundBelow = false,
+  hairline = true,
 }: SectionProps) {
   return (
     <section
       id={id}
       aria-labelledby={labelledBy}
       className={cn(
-        "hairline-top relative isolate",
+        "relative isolate",
+        hairline && "hairline-top",
         extendBackgroundBelow ? "overflow-x-clip" : "overflow-hidden",
         className,
       )}

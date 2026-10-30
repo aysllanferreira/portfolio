@@ -3,7 +3,7 @@ import type { DesignBox } from "./compare";
 /**
  * What the fidelity check compares: a page region at a viewport width against the
  * design export at `.fidelity/refs/<name>.png` (exported from the design at 1x).
- * Shader canvases are masked: their animated output is checked separately.
+ * Section frames are compared with their frozen shader background; isolated nodes without it.
  */
 export interface FidelityTarget {
   name: string;

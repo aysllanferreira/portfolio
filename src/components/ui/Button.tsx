@@ -39,10 +39,12 @@ type LinkProps = BaseProps & {
   href: string;
   /** Opens in a new tab; pass a localized hint for assistive technology. */
   external?: { hint: string } | undefined;
+  /** Localized note announced after the label without opening a new tab, e.g. "downloads a PDF". */
+  hint?: string | undefined;
   "aria-label"?: string | undefined;
 };
 
-type NativeButtonProps = BaseProps & { href?: never; external?: never } & Omit<
+type NativeButtonProps = BaseProps & { href?: never; external?: never; hint?: never } & Omit<
     ComponentPropsWithoutRef<"button">,
     "className" | "children"
   >;
@@ -63,7 +65,7 @@ export function Button(props: ButtonProps) {
   const classes = cn(button({ variant }), className);
 
   if (props.href !== undefined) {
-    const { href, external, "aria-label": ariaLabel } = props;
+    const { href, external, hint, "aria-label": ariaLabel } = props;
     const isRoute = href.startsWith("/") || href.startsWith("#");
     if (external) {
       return (
@@ -78,13 +80,21 @@ export function Button(props: ButtonProps) {
         </a>
       );
     }
+    const note = hint ? (
+      <>
+        {" "}
+        <span className="sr-only">({hint})</span>
+      </>
+    ) : null;
     return isRoute ? (
       <Link href={href} aria-label={ariaLabel} className={classes}>
         {content}
+        {note}
       </Link>
     ) : (
       <a href={href} aria-label={ariaLabel} className={classes}>
         {content}
+        {note}
       </a>
     );
   }

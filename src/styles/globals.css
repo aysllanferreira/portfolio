@@ -135,3 +135,10 @@
     border: 0;
   }
 }
+
+/* Blinking editor caret in the hero code panel (motion-safe only). */
+@keyframes caret {
+  50% {
+    opacity: 0;
+  }
+}
