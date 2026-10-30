@@ -75,7 +75,8 @@ const eslintConfig = defineConfig([
   {
     // User-facing copy lives in the i18n dictionaries, never inline in markup.
     files: ["src/components/**/*.tsx", "src/features/**/*.tsx", "src/app/**/*.tsx"],
-    ignores: ["**/*.test.tsx"],
+    // Test fixtures reproduce design instances verbatim, including their sample text.
+    ignores: ["**/*.test.tsx", "src/app/[[]lang[]]/(qa)/**"],
     rules: {
       "react/jsx-no-literals": [
         "error",

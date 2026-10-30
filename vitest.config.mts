@@ -15,7 +15,12 @@ export default defineConfig({
         test: {
           name: "node",
           environment: "node",
-          include: ["src/**/*.test.ts", "scripts/**/*.test.ts", "tests/unit/**/*.test.ts"],
+          include: [
+            "src/**/*.test.ts",
+            "scripts/**/*.test.ts",
+            "tests/unit/**/*.test.ts",
+            "tests/fidelity/**/*.test.ts",
+          ],
           setupFiles: ["./tests/setup/env.setup.ts"],
         },
       },

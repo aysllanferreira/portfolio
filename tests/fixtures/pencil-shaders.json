@@ -1,0 +1,84 @@
+{
+  "hero": {
+    "url": "hero-bg.glsl",
+    "uniforms": {
+      "u_base": "#0A0A0F",
+      "u_glow": "#7B5CFF",
+      "u_cool": "#1D3FA8",
+      "u_glowStrength": 0.42,
+      "u_gridOpacity": 0.05
+    }
+  },
+  "selected-work": {
+    "url": "section-bg.glsl",
+    "uniforms": {
+      "u_base": "#0A0A0F",
+      "u_glow": "#7B5CFF",
+      "u_cool": "#1D3FA8",
+      "u_seed": 23,
+      "u_aurora": 0.38,
+      "u_dots": 0.16,
+      "u_beam": 0.05
+    }
+  },
+  "projects": {
+    "url": "section-bg.glsl",
+    "uniforms": {
+      "u_base": "#0A0A0F",
+      "u_glow": "#7B5CFF",
+      "u_cool": "#1D3FA8",
+      "u_seed": 7,
+      "u_aurora": 0.42,
+      "u_dots": 0.16,
+      "u_beam": 0.05
+    }
+  },
+  "experience": {
+    "url": "section-bg.glsl",
+    "uniforms": {
+      "u_base": "#0A0A0F",
+      "u_glow": "#7B5CFF",
+      "u_cool": "#1D3FA8",
+      "u_seed": 41,
+      "u_aurora": 0.28,
+      "u_dots": 0.14,
+      "u_beam": 0.04
+    }
+  },
+  "stack": {
+    "url": "section-bg.glsl",
+    "uniforms": {
+      "u_base": "#0A0A0F",
+      "u_glow": "#7B5CFF",
+      "u_cool": "#1D3FA8",
+      "u_seed": 87,
+      "u_aurora": 0.32,
+      "u_dots": 0.16,
+      "u_beam": 0.05
+    }
+  },
+  "about": {
+    "url": "section-bg.glsl",
+    "uniforms": {
+      "u_base": "#0A0A0F",
+      "u_glow": "#7B5CFF",
+      "u_cool": "#1D3FA8",
+      "u_seed": 12,
+      "u_aurora": 0.3,
+      "u_dots": 0.14,
+      "u_beam": 0.04
+    }
+  },
+  "contact": {
+    "url": "section-bg.glsl",
+    "uniforms": {
+      "u_base": "#0A0A0F",
+      "u_glow": "#7B5CFF",
+      "u_cool": "#1D3FA8",
+      "u_seed": 63,
+      "u_aurora": 0.4,
+      "u_dots": 0.16,
+      "u_beam": 0.06
+    }
+  }
+}

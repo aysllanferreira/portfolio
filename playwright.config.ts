@@ -27,7 +27,8 @@ export default defineConfig({
     ? {}
     : {
         webServer: {
-          command: `npm run build && npm run start -- --port ${port}`,
+          // Clears stale server output first: OneDrive can lock it on Windows checkouts.
+          command: `npm run e2e:serve -- --port ${port}`,
           url: baseURL,
           timeout: 300_000,
           reuseExistingServer: !process.env.CI,

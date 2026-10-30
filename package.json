@@ -23,7 +23,9 @@
     "test:e2e": "playwright test",
     "assets:scan": "tsx scripts/check-no-assets.ts",
     "verify": "npm run format:check && npm run lint && npm run typecheck && npm run test && npm run assets:scan",
-    "assets:sync": "tsx scripts/assets/cli.ts"
+    "assets:sync": "tsx scripts/assets/cli.ts",
+    "qa:fidelity": "playwright test --config playwright.fidelity.config.ts",
+    "e2e:serve": "node -e \"require('fs').rmSync('.next/server',{recursive:true,force:true})\" && next build && next start"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
@@ -45,6 +47,7 @@
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
     "@types/node": "^24.19.2",
+    "@types/pngjs": "^6.0.5",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@vitejs/plugin-react": "^6.1.2",
@@ -53,6 +56,8 @@
     "eslint": "^9",
     "eslint-config-next": "16.4.3",
     "jsdom": "^30.1.3",
+    "pixelmatch": "^8.0.0",
+    "pngjs": "^7.0.0",
     "prettier": "^3.9.10",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "sharp": "^0.35.5",

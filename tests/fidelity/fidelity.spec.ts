@@ -1,0 +1,66 @@
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { resolve } from "node:path";
+
+import { expect, test } from "@playwright/test";
+
+import { compareImages, MISMATCH_BUDGET, passes, type Comparison } from "./compare";
+import { targets } from "./targets";
+
+/*
+ * Design-fidelity check: captures each target in deterministic render mode and
+ * compares it with the design export. Run with `npm run qa:fidelity`; filter with
+ * `-- -g hero`. Results land in .fidelity/report.html (never committed).
+ */
+
+const root = resolve(".fidelity");
+const results: { name: string; comparison?: Comparison; error?: string }[] = [];
+
+mkdirSync(resolve(root, "actual"), { recursive: true });
+mkdirSync(resolve(root, "diff"), { recursive: true });
+
+for (const target of targets) {
+  test(target.name, async ({ page }) => {
+    const reference = resolve(root, "refs", `${target.name}.png`);
+    test.skip(!existsSync(reference), `no design export at .fidelity/refs/${target.name}.png`);
+
+    await page.setViewportSize({ width: target.width, height: target.height ?? 900 });
+    await page.goto(target.path);
+    await page.evaluate(() => document.fonts.ready);
+
+    const capture = await page.locator(target.selector).screenshot({
+      animations: "disabled",
+      mask: [page.locator("[data-shader-state]")],
+      maskColor: "#0A0A0F",
+    });
+    writeFileSync(resolve(root, "actual", `${target.name}.png`), capture);
+
+    const comparison = compareImages(capture, readFileSync(reference));
+    writeFileSync(resolve(root, "diff", `${target.name}.png`), comparison.diff);
+    results.push({ name: target.name, comparison });
+
+    expect(
+      passes(comparison),
+      `${target.name}: ${(comparison.ratio * 100).toFixed(2)}% mismatched (budget ${String(MISMATCH_BUDGET * 100)}%), size delta ${JSON.stringify(comparison.sizeDelta)}`,
+    ).toBe(true);
+  });
+}
+
+test.afterAll(() => {
+  const rows = results
+    .map(({ name, comparison }) => {
+      const verdict = comparison && passes(comparison) ? "pass" : "fail";
+      const ratio = comparison ? `${(comparison.ratio * 100).toFixed(2)}%` : "n/a";
+      const size = comparison ? JSON.stringify(comparison.sizeDelta) : "";
+      return `<tr class="${verdict}"><td>${name}</td><td>${verdict}</td><td>${ratio}</td><td>${size}</td>
+        <td><img src="actual/${name}.png"></td><td><img src="refs/${name}.png"></td><td><img src="diff/${name}.png"></td></tr>`;
+    })
+    .join("\n");
+
+  writeFileSync(
+    resolve(root, "report.html"),
+    `<!doctype html><meta charset="utf-8"><title>Design fidelity</title>
+<style>body{font:14px system-ui;background:#0a0a0f;color:#f5f5f7}td{vertical-align:top;padding:6px}
+img{max-width:360px}.pass td:nth-child(2){color:#4ade80}.fail td:nth-child(2){color:#f87171}</style>
+<table><tr><th>Target</th><th>Verdict</th><th>Mismatch</th><th>Size delta</th><th>Actual</th><th>Design</th><th>Diff</th></tr>${rows}</table>`,
+  );
+});
