@@ -2,8 +2,18 @@ import { expect, test, type Page } from "@playwright/test";
 
 const state = (page: Page, selector: string) => page.locator(`${selector} [data-shader-state]`);
 
+/** Lifecycle tests need WebGL; environments without it are covered by the fallback test. */
+async function requireWebGL(page: Page) {
+  await page.goto("/en/qa/shader-hero");
+  const supported = await page.evaluate(() =>
+    Boolean(document.createElement("canvas").getContext("webgl")),
+  );
+  test.skip(!supported, "this browser environment provides no WebGL");
+}
+
 test.describe("shader backgrounds", () => {
   test("animate when visible and release far-away sections", async ({ page }) => {
+    await requireWebGL(page);
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto("/en/qa/shader-stack");
 
@@ -28,6 +38,7 @@ test.describe("shader backgrounds", () => {
   });
 
   test("render a single static frame when motion is reduced", async ({ page }) => {
+    await requireWebGL(page);
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.goto("/en/qa/shader-hero");
     await expect(page.locator("[data-shader-state]")).toHaveAttribute(
@@ -37,6 +48,7 @@ test.describe("shader backgrounds", () => {
   });
 
   test("pause while the tab is hidden", async ({ page }) => {
+    await requireWebGL(page);
     await page.goto("/en/qa/shader-hero");
     const background = page.locator("[data-shader-state]");
     await expect(background).toHaveAttribute("data-shader-state", "animating");

@@ -20,7 +20,14 @@ export default defineConfig({
   },
   projects: [
     { name: "chromium", use: { ...devices["Desktop Chrome"] } },
-    { name: "firefox", use: { ...devices["Desktop Firefox"] } },
+    {
+      name: "firefox",
+      use: {
+        ...devices["Desktop Firefox"],
+        // Headless Firefox disables WebGL without a GPU; ask for software rendering.
+        launchOptions: { firefoxUserPrefs: { "webgl.force-enabled": true } },
+      },
+    },
     { name: "webkit", use: { ...devices["Desktop Safari"] } },
   ],
   ...(process.env.E2E_BASE_URL
