@@ -70,6 +70,19 @@ The design lives in a design file with a token-based system: colors, radii, a ty
 - **Typography**: Geist for everything you read, Geist Mono for metadata, and Instrument Serif italic for the single accent word of each headline. All three are self-hosted at build time.
 - **Effects**: `glass` (translucent fill, 24px backdrop blur, gradient edge stroke, opaque fallback), `glow-accent` (primary buttons and featured tiles only) and `hairline-top` (section boundaries).
 
+## Localization
+
+The site ships in English, Brazilian Portuguese and Spanish at `/en`, `/pt` and `/es`, each prerendered as static HTML.
+
+- **Routing**: every page lives under `app/[lang]`. Server Components read the locale with `next/root-params`, with no prop drilling. Unknown locales (`/fr`) render the localized 404.
+- **Language negotiation**: `/` is a small Route Handler. It reads `Accept-Language` with quality values, picks the supported language the visitor prefers most (falling back to English) and answers with a `307`, `Cache-Control: private, no-store` and `Vary: Accept-Language`, so no cache can serve one visitor's language to another.
+- **Typed dictionaries** (`src/i18n/dictionaries`): English defines the shape (`Dictionary = typeof en`). Portuguese and Spanish are declared with `satisfies Dictionary`, so a missing or extra key fails type checking. A unit test also checks key parity, placeholder parity (`{year}`) and that no string is left empty.
+- **Accent headlines**: headlines with a serif accent word are translated as `{ before, accent, after }`, so each language places its accent word naturally. A `\n` marks a line break.
+- **Facts vs. copy**: locale-agnostic facts (project URLs, dates, tags) live once in `src/content`, and only prose is translated. Dates and numbers are formatted with `Intl` for the active locale.
+- **No inline copy**: ESLint's `react/jsx-no-literals` rejects hard-coded text in components, so user-facing strings can only come from the dictionaries.
+
+To add a string, add the key to `en.ts`. Type checking then points to the exact place in `pt.ts` and `es.ts` that needs the translation.
+
 ## Asset pipeline
 
 No image, vector, font or document file is committed to this repository (CI enforces it with `npm run assets:scan`). Assets live in a private S3 bucket and are served through CloudFront at `cdn.aysllan.com`. The bucket blocks all public access and only CloudFront can read it.

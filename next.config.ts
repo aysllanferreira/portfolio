@@ -9,6 +9,9 @@ const faviconUrl = `${env.NEXT_PUBLIC_ASSETS_URL}/${iconObjectKey("favicon", ass
 const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
+  experimental: {
+    globalNotFound: true,
+  },
   turbopack: {
     rules: {
       "*.css": {
