@@ -68,7 +68,31 @@ export const es = {
     },
     scrollHint: "Desplázate para explorar",
   },
-  work: {},
+  work: {
+    eyebrow: "01 — Trabajo destacado",
+    outline: "Lanzado",
+    title: {
+      before: "Productos lanzados,\nde la primera llamada a ",
+      accent: "producción.",
+      after: "",
+    },
+    intro:
+      "Más de 30 productos lanzados para clientes en EE. UU., Canadá, Europa y Brasil. Este es el que funciona en más lugares.",
+    visualLabel:
+      "Ilustración de un carril de autoservicio: la app de menú mostrando un combo por tiempo limitado y la app de punto de venta confirmando el pedido #1042, sincronizadas por un evento de pedido.",
+    case: {
+      featured: "Destacado",
+      meta: "EE. UU. · Ingeniero full stack vía Pinely",
+      title: "El software de punto de venta y menús detrás de autoservicios en EE. UU.",
+      description:
+        "Stream Signage impulsa los menús digitales de cadenas como Pollo Campero y Panda Express. Ayudé a construir la app de punto de venta, integrando Oracle, Clover y otros sistemas en el hardware de las tiendas, y la app de menú que mantiene cada pantalla sincronizada.",
+      metrics: {
+        restaurants: "Restaurantes en EE. UU. activos",
+        apps: "Apps: punto de venta + menú",
+        integrations: "Sistemas de punto de venta integrados",
+      },
+    },
+  },
   projects: {},
   experience: {},
   stack: {},

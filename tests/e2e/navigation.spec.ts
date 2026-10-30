@@ -48,7 +48,7 @@ test.describe("navigation shell", () => {
     await expect
       .poll(async () => {
         const headerBottom = await page
-          .locator("header")
+          .getByRole("banner")
           .evaluate((el) => el.getBoundingClientRect().bottom);
         const sectionTop = await page
           .locator("#stack")

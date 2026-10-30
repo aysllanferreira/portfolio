@@ -91,9 +91,12 @@ describe("small primitives", () => {
     expect(screen.getByRole("definition")).toHaveTextContent("30+");
   });
 
-  it("OutlineWord is hidden from assistive technology", () => {
-    render(<OutlineWord>Shipped</OutlineWord>);
-    expect(screen.getByText("Shipped")).toHaveAttribute("aria-hidden", "true");
+  it("OutlineWord draws its word as generated content, never as text", () => {
+    const { container } = render(<OutlineWord>Shipped</OutlineWord>);
+    const word = container.firstElementChild;
+    expect(word).toHaveAttribute("aria-hidden", "true");
+    expect(word).toHaveAttribute("data-word", "Shipped");
+    expect(word).toHaveTextContent("");
   });
 
   it("AfMark can be named or decorative", () => {

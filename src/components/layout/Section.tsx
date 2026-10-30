@@ -51,7 +51,15 @@ export function Section({
         config={background}
         className={cn(extendBackgroundBelow && "bottom-[calc(var(--footer-height)*-1)]")}
       />
-      {decoration}
+      {decoration && (
+        // Decorations use design-frame coordinates, so they live in a centered 1440px box.
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 -z-[5] mx-auto max-w-[1440px]"
+        >
+          {decoration}
+        </div>
+      )}
       <Container className={containerClassName}>{children}</Container>
     </section>
   );

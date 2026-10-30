@@ -8,6 +8,8 @@ import type { NextConfig } from "next";
 const faviconUrl = `${env.NEXT_PUBLIC_ASSETS_URL}/${iconObjectKey("favicon", assetManifest.favicon.hash, 32)}`;
 
 const nextConfig: NextConfig = {
+  // Do not advertise the framework in response headers.
+  poweredByHeader: false,
   cacheComponents: true,
   partialPrefetching: true,
   experimental: {

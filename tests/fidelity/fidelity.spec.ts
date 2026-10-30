@@ -49,6 +49,11 @@ for (const target of targets) {
       await page.addStyleTag({ content: "[data-shader-state] canvas { visibility: hidden; }" });
     }
 
+    // The fixed navbar belongs to the hero frame only; elsewhere it would cover the section.
+    if (target.selector !== "#top" && !target.selector.startsWith("[data-navbar")) {
+      await page.addStyleTag({ content: "header { visibility: hidden; }" });
+    }
+
     const capture = await page.locator(target.selector).screenshot({
       animations: "disabled",
     });

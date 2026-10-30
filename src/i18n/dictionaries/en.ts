@@ -69,7 +69,27 @@ export const en = {
     },
     scrollHint: "Scroll to explore",
   },
-  work: {},
+  work: {
+    eyebrow: "01 — Selected work",
+    outline: "Shipped",
+    title: { before: "Products shipped,\nfrom first call to ", accent: "prod.", after: "" },
+    intro:
+      "30+ products shipped for clients across the USA, Canada, Europe and Brazil. Here's the one running in the most places.",
+    visualLabel:
+      "Illustration of a drive-thru lane: the menu board app showing a limited-time combo, and the POS app confirming order #1042, kept in sync by an order event.",
+    case: {
+      featured: "Featured",
+      meta: "USA · Full stack engineer via Pinely",
+      title: "The POS and menu software behind drive-thrus across the US.",
+      description:
+        "Stream Signage powers digital menu boards for chains like Pollo Campero and Panda Express. I helped build the POS app, integrating Oracle, Clover and other POS systems on in-store hardware, and the Menu app that keeps every screen in sync.",
+      metrics: {
+        restaurants: "US restaurants live",
+        apps: "Apps: POS + menu",
+        integrations: "POS systems integrated",
+      },
+    },
+  },
   projects: {},
   experience: {},
   stack: {},

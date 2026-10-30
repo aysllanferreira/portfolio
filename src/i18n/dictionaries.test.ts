@@ -31,7 +31,9 @@ describe("dictionaries", () => {
 
   it.each(locales)("%s keeps every placeholder and never leaves a string empty", (locale) => {
     for (const [path, value] of leaves(dictionaries[locale])) {
-      if (typeof value === "string") expect(value.trim(), path).not.toBe("");
+      // An accent headline may start or end on its accent word, leaving before/after empty.
+      const optional = /\.(before|after)$/.test(path);
+      if (typeof value === "string" && !optional) expect(value.trim(), path).not.toBe("");
       expect(placeholders(value), path).toEqual(placeholders(english.get(path)));
     }
   });

@@ -68,7 +68,27 @@ export const pt = {
     },
     scrollHint: "Role para explorar",
   },
-  work: {},
+  work: {
+    eyebrow: "01 — Trabalho em destaque",
+    outline: "Entregue",
+    title: { before: "Produtos entregues,\ndo primeiro papo à ", accent: "produção.", after: "" },
+    intro:
+      "Mais de 30 produtos entregues para clientes nos EUA, Canadá, Europa e Brasil. Este é o que roda em mais lugares.",
+    visualLabel:
+      "Ilustração de uma pista de drive-thru: o app de cardápio mostrando um combo por tempo limitado e o app de PDV confirmando o pedido #1042, sincronizados por um evento de pedido.",
+    case: {
+      featured: "Destaque",
+      meta: "EUA · Engenheiro full stack pela Pinely",
+      title: "O software de PDV e cardápio por trás de drive-thrus pelos EUA.",
+      description:
+        "A Stream Signage alimenta cardápios digitais de redes como Pollo Campero e Panda Express. Ajudei a construir o app de PDV, integrando Oracle, Clover e outros sistemas de PDV no hardware das lojas, e o app de cardápio que mantém todas as telas sincronizadas.",
+      metrics: {
+        restaurants: "Restaurantes nos EUA no ar",
+        apps: "Apps: PDV + cardápio",
+        integrations: "Sistemas de PDV integrados",
+      },
+    },
+  },
   projects: {},
   experience: {},
   stack: {},
