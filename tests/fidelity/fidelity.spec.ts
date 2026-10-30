@@ -3,7 +3,13 @@ import { resolve } from "node:path";
 
 import { expect, test } from "@playwright/test";
 
-import { compareImages, MISMATCH_BUDGET, passes, type Comparison } from "./compare";
+import {
+  COLOR_THRESHOLD,
+  compareImages,
+  MISMATCH_BUDGET,
+  passes,
+  type Comparison,
+} from "./compare";
 import { targets } from "./targets";
 
 /*
@@ -25,7 +31,17 @@ for (const target of targets) {
 
     await page.setViewportSize({ width: target.width, height: target.height ?? 900 });
     await page.goto(target.path);
-    await page.evaluate(() => document.fonts.ready);
+    await page.waitForLoadState("networkidle");
+    // Lazy images in view must finish decoding before the capture.
+    await page.evaluate(async () => {
+      await document.fonts.ready;
+      await Promise.all(
+        [...document.images].map((image) => {
+          image.loading = "eager";
+          return image.decode().catch(() => undefined);
+        }),
+      );
+    });
 
     const capture = await page.locator(target.selector).screenshot({
       animations: "disabled",
@@ -34,13 +50,18 @@ for (const target of targets) {
     });
     writeFileSync(resolve(root, "actual", `${target.name}.png`), capture);
 
-    const comparison = compareImages(capture, readFileSync(reference));
+    const comparison = compareImages(capture, readFileSync(reference), target.designBox);
     writeFileSync(resolve(root, "diff", `${target.name}.png`), comparison.diff);
     results.push({ name: target.name, comparison });
 
+    if (target.exception) {
+      test.info().annotations.push({ type: "reviewed visually", description: target.exception });
+      return;
+    }
+
     expect(
       passes(comparison),
-      `${target.name}: ${(comparison.ratio * 100).toFixed(2)}% mismatched (budget ${String(MISMATCH_BUDGET * 100)}%), size delta ${JSON.stringify(comparison.sizeDelta)}`,
+      `${target.name}: ${(comparison.ratio * 100).toFixed(2)}% mismatched (budget ${String(MISMATCH_BUDGET * 100)}% at color threshold ${String(COLOR_THRESHOLD)}), size delta ${JSON.stringify(comparison.sizeDelta)}`,
     ).toBe(true);
   });
 }

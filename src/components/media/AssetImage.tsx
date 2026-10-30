@@ -1,6 +1,8 @@
 import { rasterAsset, rasterSrcSet, rasterUrl, type RasterKey } from "@/lib/assets";
 import { cn } from "@/lib/cn";
 
+import type { CSSProperties } from "react";
+
 interface AssetImageProps {
   name: RasterKey;
   /** Localized description, or "" for a purely decorative image. */
@@ -9,8 +11,10 @@ interface AssetImageProps {
   sizes: string;
   /** Above-the-fold images load eagerly with high priority. */
   priority?: boolean;
-  className?: string;
-  imgClassName?: string;
+  className?: string | undefined;
+  imgClassName?: string | undefined;
+  /** Computed, data-driven styles for the <img> (e.g. a design-defined crop). */
+  imgStyle?: CSSProperties | undefined;
 }
 
 /**
@@ -26,6 +30,7 @@ export function AssetImage({
   priority = false,
   className,
   imgClassName,
+  imgStyle,
 }: AssetImageProps) {
   const { width, height, blurDataURL } = rasterAsset(name);
 
@@ -44,11 +49,12 @@ export function AssetImage({
         fetchPriority={priority ? "high" : "auto"}
         decoding="async"
         className={cn("block h-auto max-w-full", imgClassName)}
-        style={
-          blurDataURL
+        style={{
+          ...(blurDataURL
             ? { backgroundImage: `url(${blurDataURL})`, backgroundSize: "cover" }
-            : undefined
-        }
+            : {}),
+          ...imgStyle,
+        }}
       />
     </picture>
   );

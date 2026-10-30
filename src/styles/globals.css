@@ -16,7 +16,8 @@
     color: var(--color-text-primary);
     font-family: var(--font-sans);
     font-size: var(--text-body);
-    line-height: var(--text-body--line-height);
+    /* Text without an explicit line height uses the font's own metrics, as in the design. */
+    line-height: normal;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;

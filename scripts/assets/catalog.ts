@@ -1,3 +1,5 @@
+import { techBrandColors } from "../../src/content/tech-logos";
+
 import type { CatalogEntry, DisplayWidths, DocumentEntry, SvgEntry } from "./types";
 
 /*
@@ -10,39 +12,6 @@ import type { CatalogEntry, DisplayWidths, DocumentEntry, SvgEntry } from "./typ
 const same = (width: number): DisplayWidths => ({ mobile: width, tablet: width, desktop: width });
 
 const flags = ["us", "br", "es", "ca", "gb", "no", "cz"] as const;
-
-/** Technology logos and their brand colors as tuned for the dark theme. */
-const logoColors = {
-  typescript: "#3178C6",
-  nodedotjs: "#5FA04E",
-  react: "#61DAFB",
-  nextdotjs: "#FFFFFF",
-  vuedotjs: "#4FC08D",
-  nestjs: "#E0234E",
-  amazonwebservices: "#FF9900",
-  redux: "#9B7BE0",
-  postgresql: "#6E9BF5",
-  tailwindcss: "#38BDF8",
-  express: "#FFFFFF",
-  graphql: "#E10098",
-  prisma: "#FFFFFF",
-  python: "#4B8BBE",
-  mongodb: "#4DB33D",
-  mysql: "#5C9BD1",
-  amazonecs: "#FF9900",
-  awslambda: "#FF9900",
-  amazonec2: "#FF9900",
-  docker: "#2496ED",
-  amazons3: "#7AC143",
-  amazonsimpleemailservice: "#E8546A",
-  githubactions: "#2088FF",
-  langchain: "#1C9C7C",
-  oracle: "#F80000",
-  jira: "#2684FF",
-  openid: "#F78C40",
-} as const;
-
-export type TechLogo = keyof typeof logoColors;
 
 /** The AF monogram in every fill the design uses it with. */
 const afMarkColors = {
@@ -92,7 +61,7 @@ export const catalog: readonly CatalogEntry[] = [
     source: "images/people/konstantin.jpg",
     display: same(56),
   },
-  ...Object.entries(logoColors).map(([name, color]): SvgEntry => ({
+  ...Object.entries(techBrandColors).map(([name, color]): SvgEntry => ({
     kind: "svg",
     key: `logos/${name}`,
     source: `images/stack/${name}.svg`,

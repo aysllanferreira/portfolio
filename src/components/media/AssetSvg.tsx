@@ -7,7 +7,7 @@ interface AssetSvgProps {
   /** Rendered size in CSS pixels; the other side follows the vector's aspect ratio. */
   width?: number;
   height?: number;
-  className?: string;
+  className?: string | undefined;
 }
 
 /** A recolored vector (logo, brand mark) from the asset CDN. Vectors need no srcset. */

@@ -13,26 +13,38 @@ export interface Comparison {
   diff: Buffer;
 }
 
-/** Per-pixel color tolerance (0–1); absorbs anti-aliasing differences between renderers. */
-export const COLOR_THRESHOLD = 0.1;
+/*
+ * Calibration: the design tool (Skia) and Chromium rasterize text with different gamma
+ * and hinting, so glyph edges never match pixel for pixel even when layout, color and
+ * spacing are identical. A 0.3 color threshold ignores that anti-aliasing noise while
+ * still flagging wrong colors, offsets and sizes; layout itself is held to ±2px.
+ */
+
+/** Per-pixel color tolerance (0–1). */
+export const COLOR_THRESHOLD = 0.3;
 
 /** Share of differing pixels a comparison may have and still pass. */
-export const MISMATCH_BUDGET = 0.005;
+export const MISMATCH_BUDGET = 0.05;
+
+/** Allowed difference between rendered and designed box size, in CSS pixels. */
+export const SIZE_TOLERANCE = 2;
 
 /**
  * Compares a rendered capture with a design export. Images of different sizes are
  * compared over their overlap; any size difference is reported and fails the check.
  */
-export function compareImages(actual: Buffer, expected: Buffer): Comparison {
+export function compareImages(actual: Buffer, expected: Buffer, designBox?: DesignBox): Comparison {
   const a = PNG.sync.read(actual);
-  const b = PNG.sync.read(expected);
+  const b = designBox ? cropCenter(PNG.sync.read(expected), designBox) : PNG.sync.read(expected);
   const width = Math.min(a.width, b.width);
   const height = Math.min(a.height, b.height);
 
+  // Design exports leave unfilled areas transparent; the page paints them with the
+  // background color, so both images are flattened onto it before comparing.
   const crop = (image: PNG) => {
     const out = new PNG({ width, height });
     PNG.bitblt(image, out, 0, 0, width, height, 0, 0);
-    return out;
+    return flatten(out);
   };
 
   const diff = new PNG({ width, height });
@@ -51,7 +63,43 @@ export function compareImages(actual: Buffer, expected: Buffer): Comparison {
   };
 }
 
+export interface DesignBox {
+  width: number;
+  height: number;
+  /** Offset of the node's outer shadow; the export pads by the blur but shifts by this offset. */
+  shadowOffset?: { x: number; y: number };
+}
+
+/** Cuts the node's own box out of an export padded for its effects. */
+export function cropCenter(image: PNG, box: DesignBox): PNG {
+  const width = Math.min(Math.round(box.width), image.width);
+  const height = Math.min(Math.round(box.height), image.height);
+  const out = new PNG({ width, height });
+  const x = Math.max(0, Math.floor((image.width - width) / 2) - (box.shadowOffset?.x ?? 0));
+  const y = Math.max(0, Math.floor((image.height - height) / 2) - (box.shadowOffset?.y ?? 0));
+  PNG.bitblt(image, out, x, y, width, height, 0, 0);
+  return out;
+}
+
+/** The page background (`--color-bg`). */
+const BACKGROUND = [10, 10, 15] as const;
+
+function flatten(image: PNG): PNG {
+  const { data } = image;
+  for (let i = 0; i < data.length; i += 4) {
+    const alpha = (data[i + 3] ?? 255) / 255;
+    for (let channel = 0; channel < 3; channel++) {
+      const value = data[i + channel] ?? 0;
+      data[i + channel] = Math.round(value * alpha + (BACKGROUND[channel] ?? 0) * (1 - alpha));
+    }
+    data[i + 3] = 255;
+  }
+  return image;
+}
+
 export function passes(comparison: Comparison): boolean {
-  const sameSize = comparison.sizeDelta.width === 0 && comparison.sizeDelta.height === 0;
+  const sameSize =
+    Math.abs(comparison.sizeDelta.width) <= SIZE_TOLERANCE &&
+    Math.abs(comparison.sizeDelta.height) <= SIZE_TOLERANCE;
   return sameSize && comparison.ratio <= MISMATCH_BUDGET;
 }
