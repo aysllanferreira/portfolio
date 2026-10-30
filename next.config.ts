@@ -1,7 +1,9 @@
 import type { NextConfig } from "next";
 
+// Validate the environment before anything compiles; a bad value fails the build here.
+import "./src/lib/env";
+
 const nextConfig: NextConfig = {
-  /* config options here */
   cacheComponents: true,
   partialPrefetching: true,
   turbopack: {

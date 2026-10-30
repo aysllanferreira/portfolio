@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Aysllan Ferreira — Portfolio
 
-## Getting Started
+Source code of [aysllan.com](https://aysllan.com), the portfolio of Aysllan Ferreira, Senior Software Engineer.
 
-First, run the development server:
+A single-page site in English, Portuguese and Spanish, built to match its design system pixel for pixel at mobile, tablet and desktop widths. Every image, logo and document is served from a CDN, and the codebase holds itself to strict typing, automated accessibility checks and performance budgets.
+
+## Tech stack
+
+| Concern      | Choice                                                                        |
+| ------------ | ----------------------------------------------------------------------------- |
+| Framework    | Next.js 16 (App Router, Cache Components) · React 19                          |
+| Language     | TypeScript (strict, `noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`) |
+| Styling      | Tailwind CSS v4 with design tokens mirrored from the design system            |
+| Localization | Typed dictionaries per locale, statically prerendered (`/en`, `/pt`, `/es`)   |
+| Assets       | S3 + CloudFront (`cdn.aysllan.com`), pre-optimized AVIF/WebP, typed manifest  |
+| Testing      | Vitest + Testing Library · Playwright (Chromium, Firefox, WebKit) + axe       |
+| Hosting      | AWS Amplify (SSR compute), deployed from `main`                               |
+
+## Getting started
+
+Requirements: Node.js 24 (see `.nvmrc`) and npm 11.
 
 ```bash
+npm ci
+cp .env.example .env.local   # then fill in the public values
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The app needs `NEXT_PUBLIC_SITE_URL` and `NEXT_PUBLIC_ASSETS_URL` at build time. The build fails fast, naming the variable, if either is missing or malformed.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Script                  | What it does                                                                  |
+| ----------------------- | ----------------------------------------------------------------------------- |
+| `npm run dev`           | Starts the development server                                                 |
+| `npm run build`         | Production build                                                              |
+| `npm run start`         | Serves the production build                                                   |
+| `npm run verify`        | The local quality gate: format check, lint, typecheck, unit tests, asset scan |
+| `npm run lint`          | ESLint with zero warnings allowed                                             |
+| `npm run typecheck`     | Generates route types and runs the TypeScript compiler                        |
+| `npm run format`        | Formats the codebase with Prettier                                            |
+| `npm test`              | Unit tests (Vitest)                                                           |
+| `npm run test:coverage` | Unit tests with coverage thresholds                                           |
+| `npm run test:e2e`      | End-to-end and accessibility tests against a production build                 |
+| `npm run assets:scan`   | Fails if an image, vector, font or document file is tracked in git            |
 
-## Learn More
+## Project structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+src/
+  app/          Routes only: layouts, pages and metadata files
+  components/   Shared building blocks (ui, layout, media, brand, effects)
+  features/     One folder per page section; a feature never imports another feature
+  content/      Locale-agnostic facts (projects, roles, stack) and the generated asset manifest
+  i18n/         Locale config and typed dictionaries
+  lib/          Framework-agnostic utilities (env validation, formatting, class names)
+  styles/       Design tokens and global styles
+scripts/        Tooling (asset scan, asset pipeline)
+tests/          End-to-end specs and test setup
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Quality gates
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Every push to `main` runs CI: formatting, linting, type checking, unit tests with coverage, the repository asset scan, a production build, and end-to-end tests in Chromium, Firefox and WebKit. The same checks run locally with `npm run verify` and `npm run test:e2e` before anything is pushed.
