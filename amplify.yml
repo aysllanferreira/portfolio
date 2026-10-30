@@ -1,0 +1,25 @@
+# AWS Amplify Hosting build (Next.js SSR, WEB_COMPUTE platform).
+# Versioned here so every deployment is reproducible and reviewable; it takes
+# precedence over the build settings stored in the Amplify console.
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - nvm install 24
+        - nvm use 24
+        - node --version && npm --version
+        - npm ci --cache .npm --prefer-offline
+    build:
+      commands:
+        # Public build-time values (NEXT_PUBLIC_*) come from the branch's environment
+        # variables in Amplify; the build fails fast if any is missing or malformed.
+        - npm run build
+  artifacts:
+    baseDirectory: .next
+    files:
+      - "**/*"
+  cache:
+    paths:
+      - .next/cache/**/*
+      - .npm/**/*

@@ -115,6 +115,19 @@ npm run assets:sync -- --only "logos/*"    # restrict uploads to matching keys
 
 The sync reads `ASSETS_SOURCE_DIR` and the AWS settings from `.env.local`, and uses the local AWS profile. Building or deploying the site never needs AWS credentials. For least privilege, the IAM user running the sync only needs `s3:GetObject`, `s3:PutObject` and `s3:ListBucket` on the asset bucket, plus `cloudfront:CreateInvalidation` and `cloudfront:GetInvalidation` on the distribution.
 
+## Deployment
+
+The site runs on **AWS Amplify Hosting** (Next.js SSR compute) at [aysllan.com](https://aysllan.com).
+
+- **Trunk-based flow**: all work lands on `main`. Before every push, the local gate runs (`npm run verify`, `npm run build`, `npm run test:e2e`). Each push to `main` triggers CI in GitHub Actions and an Amplify build. If a build fails, Amplify keeps serving the last successful deployment.
+- **Versioned build**: `amplify.yml` pins Node 24, installs with `npm ci` and caches `.npm` and `.next/cache`. It takes precedence over the console's build settings.
+- **Environment**: Amplify branch variables provide `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_ASSETS_URL` and `NEXT_PUBLIC_SITE_ENV`. They are validated when the build starts. The app needs no secrets and no AWS credentials at build or run time.
+- **Construction mode**: while `NEXT_PUBLIC_SITE_ENV` is anything but `production`, every response carries `X-Robots-Tag: noindex, nofollow`, so an unfinished site never reaches search indexes. Switching the variable to `production` and redeploying makes the site indexable.
+- **Security headers** on every response: a Content Security Policy (scripts only from the site, images and media only from the CDN, no plugins, no framing), HSTS with preload, `nosniff`, a strict referrer policy and a restrictive permissions policy. Scripts allow `'unsafe-inline'` because Next.js streams its RSC payload in inline scripts. Nonces would force every page to render dynamically, and the site has no user input or third-party scripts.
+- **Rollback**: in the Amplify console, open the `main` branch and use **Redeploy this version** on the last good build, or `git revert` the bad commit and push. Asset objects on the CDN are never deleted or overwritten, so any earlier build still finds its images.
+
+Experimental Next.js flags in use: `globalNotFound`, which provides the 404 page for unmatched URLs under a dynamic `[lang]` root layout.
+
 ## Quality gates
 
 Every push to `main` runs CI: formatting, linting, type checking, unit tests with coverage, the repository asset scan, a production build, and end-to-end tests in Chromium, Firefox and WebKit. The same checks run locally with `npm run verify` and `npm run test:e2e` before anything is pushed.
