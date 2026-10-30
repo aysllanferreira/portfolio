@@ -59,6 +59,17 @@ scripts/        Tooling (asset scan, asset pipeline)
 tests/          End-to-end specs and test setup
 ```
 
+## Design system
+
+The design lives in a design file with a token-based system: colors, radii, a type scale, effects and 48 reusable components, drawn at three widths (390 mobile, 834 tablet, 1440 desktop). The code mirrors it instead of approximating it.
+
+- **Tokens** (`src/styles/tokens.css`) reproduce the design variables one-to-one with the same names, so `bg-surface`, `text-text-muted`, `rounded-lg` or `text-h2` mean exactly what they mean in the design. Tailwind's default palette, radii and breakpoints are removed, so off-system values cannot creep in. A unit test compares every token with an export of the design variables.
+- **Spacing** keeps Tailwind's 4px base. Every design spacing token (4, 8, 12, 16, 24, 32, 48, 64, 120) is a multiple of 4.
+- **Layout ranges** are `mobile` (< 768px), `tablet` (768–1199px) and `desktop` (≥ 1200px).
+- **Anchored fluid scaling** (`src/styles/fluid.css`): `--dpx`, a design pixel, equals exactly `1px` at 390, 834 and 1440, and scales with the viewport inside its range. Utilities such as `fluid-text-44 tablet:fluid-text-72 desktop:fluid-text-84` state the design values directly. Pages match the design exactly at the designed widths and degrade gracefully in between. Body text keeps fixed sizes for readability.
+- **Typography**: Geist for everything you read, Geist Mono for metadata, and Instrument Serif italic for the single accent word of each headline. All three are self-hosted at build time.
+- **Effects**: `glass` (translucent fill, 24px backdrop blur, gradient edge stroke, opaque fallback), `glow-accent` (primary buttons and featured tiles only) and `hairline-top` (section boundaries).
+
 ## Quality gates
 
 Every push to `main` runs CI: formatting, linting, type checking, unit tests with coverage, the repository asset scan, a production build, and end-to-end tests in Chromium, Firefox and WebKit. The same checks run locally with `npm run verify` and `npm run test:e2e` before anything is pushed.

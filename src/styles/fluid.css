@@ -1,0 +1,89 @@
+/*
+ * Anchored fluid scaling.
+ *
+ * `--dpx` is one "design pixel": exactly 1px at each designed width (390, 834, 1440),
+ * scaling proportionally with the viewport inside its layout range and holding at the
+ * range's caps. Pencil values are written in design pixels, so `fluid-text-84` renders
+ * 84px at 1440 and scales smoothly down to the start of the desktop range.
+ *
+ * Keep in sync with `fluidRanges` in src/lib/fluid.ts (a unit test enforces it).
+ */
+:root {
+  --dpx: clamp(0.8205px, calc(100vw / 390), 1.15px);
+}
+
+@media (width >= 48rem) {
+  :root {
+    --dpx: clamp(0.9209px, calc(100vw / 834), 1.12px);
+  }
+}
+
+@media (width >= 75rem) {
+  :root {
+    --dpx: clamp(0.8333px, calc(100vw / 1440), 1px);
+  }
+}
+
+@utility fluid-text-* {
+  font-size: calc(--value(number) * var(--dpx));
+}
+
+@utility fluid-p-* {
+  padding: calc(--value(number) * var(--dpx));
+}
+
+@utility fluid-px-* {
+  padding-inline: calc(--value(number) * var(--dpx));
+}
+
+@utility fluid-py-* {
+  padding-block: calc(--value(number) * var(--dpx));
+}
+
+@utility fluid-pt-* {
+  padding-top: calc(--value(number) * var(--dpx));
+}
+
+@utility fluid-pb-* {
+  padding-bottom: calc(--value(number) * var(--dpx));
+}
+
+@utility fluid-gap-* {
+  gap: calc(--value(number) * var(--dpx));
+}
+
+@utility fluid-gap-x-* {
+  column-gap: calc(--value(number) * var(--dpx));
+}
+
+@utility fluid-gap-y-* {
+  row-gap: calc(--value(number) * var(--dpx));
+}
+
+@utility fluid-mt-* {
+  margin-top: calc(--value(number) * var(--dpx));
+}
+
+@utility fluid-w-* {
+  width: calc(--value(number) * var(--dpx));
+}
+
+@utility fluid-h-* {
+  height: calc(--value(number) * var(--dpx));
+}
+
+@utility fluid-max-w-* {
+  max-width: calc(--value(number) * var(--dpx));
+}
+
+@utility fluid-top-* {
+  top: calc(--value(number) * var(--dpx));
+}
+
+@utility fluid-left-* {
+  left: calc(--value(number) * var(--dpx));
+}
+
+@utility fluid-right-* {
+  right: calc(--value(number) * var(--dpx));
+}

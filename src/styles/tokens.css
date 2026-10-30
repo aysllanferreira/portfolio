@@ -1,0 +1,90 @@
+/*
+ * Design tokens, mirrored 1:1 from the Pencil design system variables.
+ * Names match the design file so a token reads the same in both places
+ * (`bg-surface`, `text-text-muted`, `rounded-lg`, `text-h2`).
+ *
+ * Spacing keeps Tailwind's 4px base: every Pencil space token is a multiple of 4.
+ *   space-1  4px  -> 1     space-4 16px -> 4     space-7  48px -> 12
+ *   space-2  8px  -> 2     space-5 24px -> 6     space-8  64px -> 16
+ *   space-3 12px  -> 3     space-6 32px -> 8     space-9 120px -> 30
+ */
+
+@theme {
+  /* Layout ranges: mobile < 768 <= tablet < 1200 <= desktop. */
+  --breakpoint-*: initial;
+  --breakpoint-tablet: 48rem;
+  --breakpoint-desktop: 75rem;
+
+  /* Color */
+  --color-*: initial;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-bg: #0a0a0f;
+  --color-surface: #14141b;
+  --color-surface-2: #1b1b24;
+  --color-glass: #14141bb8;
+  --color-border: #272733;
+  --color-border-strong: #3a3a4a;
+  --color-text-primary: #f5f5f7;
+  --color-text-muted: #b4b4c0;
+  --color-text-faint: #7c7c8a;
+  --color-accent: #a493ff;
+  --color-accent-strong: #7b5cff;
+  --color-accent-soft: #c3b8ff;
+  --color-accent-tint: #a493ff1f;
+  --color-on-accent: #0a0a0f;
+  --color-success: #4ade80;
+  --color-info: #5ea8ff;
+  /* Secondary shader glow, used by static fallbacks. */
+  --color-cool: #1d3fa8;
+
+  /* Radius */
+  --radius-*: initial;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --radius-pill: 999px;
+
+  /* Typography: families are bound to the self-hosted next/font variables. */
+  --font-*: initial;
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-serif: var(--font-instrument-serif), ui-serif, Georgia, serif;
+
+  /* Type scale (size / line-height / tracking) from the Typography board. */
+  --text-*: initial;
+  --text-display: 84px;
+  --text-display--line-height: 1.02;
+  --text-display--letter-spacing: -0.0417em;
+  --text-h1: 64px;
+  --text-h1--line-height: 1.04;
+  --text-h1--letter-spacing: -0.039em;
+  --text-h2: 36px;
+  --text-h2--line-height: 1.15;
+  --text-h2--letter-spacing: -0.0333em;
+  --text-h3: 24px;
+  --text-h3--line-height: 1.2;
+  --text-h3--letter-spacing: -0.025em;
+  --text-body-lg: 18px;
+  --text-body-lg--line-height: 1.55;
+  --text-body: 15px;
+  --text-body--line-height: 1.55;
+  --text-caption: 12px;
+  --text-caption--line-height: 1.4;
+  --text-caption--letter-spacing: 0.0417em;
+  --text-caption-sm: 11px;
+  --text-caption-sm--line-height: 1.4;
+  --text-caption-sm--letter-spacing: 0.0364em;
+
+  /* Effects */
+  --shadow-*: initial;
+  --shadow-glow: 0 12px 40px #7b5cff66;
+  --shadow-panel: 0 30px 60px #00000080;
+  --shadow-panel-lg: 0 40px 80px #00000099;
+  --inset-shadow-*: initial;
+  --inset-shadow-highlight: inset 0 1px 0 #ffffff66;
+  --blur-glass: 24px;
+}
