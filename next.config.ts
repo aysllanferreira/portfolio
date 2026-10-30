@@ -1,7 +1,10 @@
+import { assetManifest } from "./src/content/assets.generated";
+import { iconObjectKey } from "./src/lib/asset-paths";
+import { env } from "./src/lib/env"; // validates the environment: a bad value fails the build here
+
 import type { NextConfig } from "next";
 
-// Validate the environment before anything compiles; a bad value fails the build here.
-import "./src/lib/env";
+const faviconUrl = `${env.NEXT_PUBLIC_ASSETS_URL}/${iconObjectKey("favicon", assetManifest.favicon.hash, 32)}`;
 
 const nextConfig: NextConfig = {
   cacheComponents: true,
@@ -13,6 +16,12 @@ const nextConfig: NextConfig = {
         as: "*.css",
       },
     },
+  },
+  redirects() {
+    return Promise.resolve([
+      // Browsers request /favicon.ico regardless of markup; the file lives on the CDN.
+      { source: "/favicon.ico", destination: faviconUrl, permanent: true },
+    ]);
   },
 };
 

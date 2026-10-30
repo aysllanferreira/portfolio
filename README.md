@@ -70,6 +70,38 @@ The design lives in a design file with a token-based system: colors, radii, a ty
 - **Typography**: Geist for everything you read, Geist Mono for metadata, and Instrument Serif italic for the single accent word of each headline. All three are self-hosted at build time.
 - **Effects**: `glass` (translucent fill, 24px backdrop blur, gradient edge stroke, opaque fallback), `glow-accent` (primary buttons and featured tiles only) and `hairline-top` (section boundaries).
 
+## Asset pipeline
+
+No image, vector, font or document file is committed to this repository (CI enforces it with `npm run assets:scan`). Assets live in a private S3 bucket and are served through CloudFront at `cdn.aysllan.com`. The bucket blocks all public access and only CloudFront can read it.
+
+```
+scripts/assets/catalog.ts        what the site renders: logical key, source file, rendered
+        |                        widths per layout (measured in the design), logo colors
+npm run assets:sync
+        |-- raster  -> AVIF + WebP at each rendered width at 1x and 2x (never upscaled),
+        |              alpha preserved, plus a 16px blurred placeholder
+        |-- svg     -> recolored to the exact design fill, optimized with svgo
+        |-- icon    -> favicon SVG plus PNG renders (32, 180, 192, 512)
+        |-- pdf     -> stable URL, served as a named download
+        |-- upload  -> content-hashed keys with `Cache-Control: immutable`, skipping
+        |              objects that already exist; every upload verified
+        |-- invalidate changed documents only (hashed files never need it)
+        +-- src/content/assets.generated.ts   (typed manifest, committed)
+```
+
+- **Typed references.** Components refer to assets by key (`<AssetImage name="people/aysllan" …/>`). An unknown key is a compile error, not a broken image in production.
+- **No runtime image processing.** `AssetImage` renders a server-side `<picture>` whose `srcset` lists exactly the stored widths, so the browser picks the right file and Amplify never resizes an image. Intrinsic sizes in the manifest reserve layout space, and large images show a blurred placeholder.
+- **Safe to re-run.** Keys are derived from source content plus processing options. Re-running uploads only what changed, and the manifest stays byte-identical when nothing changed.
+- **Documents** (résumé and cover letter per language) keep stable, shareable URLs and are invalidated on CloudFront when replaced.
+
+```bash
+npm run assets:sync -- --dry-run          # list every object without touching AWS
+npm run assets:sync                        # optimize, upload, invalidate, write manifest
+npm run assets:sync -- --only "logos/*"    # restrict uploads to matching keys
+```
+
+The sync reads `ASSETS_SOURCE_DIR` and the AWS settings from `.env.local`, and uses the local AWS profile. Building or deploying the site never needs AWS credentials. For least privilege, the IAM user running the sync only needs `s3:GetObject`, `s3:PutObject` and `s3:ListBucket` on the asset bucket, plus `cloudfront:CreateInvalidation` and `cloudfront:GetInvalidation` on the distribution.
+
 ## Quality gates
 
 Every push to `main` runs CI: formatting, linting, type checking, unit tests with coverage, the repository asset scan, a production build, and end-to-end tests in Chromium, Firefox and WebKit. The same checks run locally with `npm run verify` and `npm run test:e2e` before anything is pushed.

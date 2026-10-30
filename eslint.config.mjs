@@ -104,6 +104,15 @@ const eslintConfig = defineConfig([
     },
   },
   ...featureBoundaries,
+  {
+    // Asymmetric matchers (expect.any, expect.stringMatching) are typed `any`, and
+    // asserting on mocked methods reads them unbound; both are idiomatic in tests.
+    files: ["**/*.test.{ts,tsx}", "tests/**/*.ts"],
+    rules: {
+      "@typescript-eslint/no-unsafe-assignment": "off",
+      "@typescript-eslint/unbound-method": "off",
+    },
+  },
   globalIgnores([
     ".next/**",
     "out/**",
