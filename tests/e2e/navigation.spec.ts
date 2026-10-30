@@ -176,9 +176,10 @@ test.describe("footer", () => {
   });
 });
 
-test("client islands receive only the strings they render", async ({ request }) => {
+test("dictionaries stay on the server", async ({ request }) => {
   const html = await (await request.get("/en")).text();
-  // No component renders this string yet; it would only appear if a whole dictionary
-  // were passed to a client component and serialized into the page payload.
-  expect(html).not.toContain("downloads a PDF");
+  // If the dictionaries module reached a client component, every locale would be
+  // serialized into the page; the English page must contain no Portuguese copy.
+  expect(html).not.toContain("Pular para o conteúdo");
+  expect(html).not.toContain("Saltar al contenido");
 });
