@@ -35,7 +35,9 @@ export const SIZE_TOLERANCE = 2;
  */
 export function compareImages(actual: Buffer, expected: Buffer, designBox?: DesignBox): Comparison {
   const a = PNG.sync.read(actual);
-  const b = designBox ? cropCenter(PNG.sync.read(expected), designBox) : PNG.sync.read(expected);
+  const b = designBox
+    ? alignReference(PNG.sync.read(expected), designBox, a)
+    : PNG.sync.read(expected);
   const width = Math.min(a.width, b.width);
   const height = Math.min(a.height, b.height);
 
@@ -68,6 +70,42 @@ export interface DesignBox {
   height: number;
   /** Offset of the node's outer shadow; the export pads by the blur but shifts by this offset. */
   shadowOffset?: { x: number; y: number };
+}
+
+/** Exports padded by at most this much are aligned by search instead of by formula. */
+const MAX_ALIGNMENT_SEARCH = 64;
+
+/**
+ * Finds the node's own box inside an export padded for its effects. Padding is uneven
+ * when effects differ per side (a glow on the left only), so small paddings are searched
+ * for the offset that best matches the capture; large ones fall back to the formula.
+ */
+export function alignReference(image: PNG, box: DesignBox, capture: PNG): PNG {
+  const padX = image.width - Math.round(box.width);
+  const padY = image.height - Math.round(box.height);
+  if (padX <= 0 && padY <= 0) return cropCenter(image, box);
+  if (padX > MAX_ALIGNMENT_SEARCH || padY > MAX_ALIGNMENT_SEARCH) return cropCenter(image, box);
+
+  const target = flatten(cropAt(capture, 0, 0, Math.round(box.width), Math.round(box.height)));
+  let best = { x: 0, y: 0, score: Infinity };
+  for (let y = 0; y <= Math.max(0, padY); y++) {
+    for (let x = 0; x <= Math.max(0, padX); x++) {
+      const candidate = flatten(cropAt(image, x, y, target.width, target.height));
+      const score = pixelmatch(candidate.data, target.data, null, target.width, target.height, {
+        threshold: COLOR_THRESHOLD,
+      });
+      if (score < best.score) best = { x, y, score };
+    }
+  }
+  return cropAt(image, best.x, best.y, Math.round(box.width), Math.round(box.height));
+}
+
+function cropAt(image: PNG, x: number, y: number, width: number, height: number): PNG {
+  const w = Math.min(width, image.width - x);
+  const h = Math.min(height, image.height - y);
+  const out = new PNG({ width: w, height: h });
+  PNG.bitblt(image, out, x, y, w, h, 0, 0);
+  return out;
 }
 
 /** Cuts the node's own box out of an export padded for its effects. */

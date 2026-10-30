@@ -37,3 +37,16 @@ test("the page runs without Content Security Policy violations", async ({ page }
 
   expect(violations).toEqual([]);
 });
+
+test("server-only validation code never ships to the browser", async ({ page, request }) => {
+  await page.goto("/en");
+  const scripts = await page
+    .locator("script[src]")
+    .evaluateAll((elements) => elements.map((element) => (element as HTMLScriptElement).src));
+
+  for (const src of scripts) {
+    const body = await (await request.get(src)).text();
+    // Zod's runtime probes `Function("")`, which the CSP rightly blocks as eval.
+    expect(body.includes("$ZodGUID"), `${src} bundles the env validation schema`).toBe(false);
+  }
+});

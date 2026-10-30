@@ -34,6 +34,26 @@
     border-radius: 4px;
   }
 
+  /* The page behind an open modal menu does not scroll. */
+  html:has(dialog[open]) {
+    overflow: hidden;
+  }
+
+  /* Height of the footer, which sits on the contact section's background as in the design. */
+  :root {
+    --footer-height: 184px;
+  }
+  @media (width >= 48rem) {
+    :root {
+      --footer-height: 160px;
+    }
+  }
+  @media (width >= 75rem) {
+    :root {
+      --footer-height: 96px;
+    }
+  }
+
   /* Anchored sections land below the sticky navbar. */
   [id] {
     scroll-margin-top: 96px;

@@ -9,4 +9,4 @@ export const env: Env = parseEnv({
 });
 
 export const isProductionSite = env.NEXT_PUBLIC_SITE_ENV === "production";
-export const isTestRender = env.NEXT_PUBLIC_RENDER_MODE === "test";
+export { isTestRender } from "./render-mode";

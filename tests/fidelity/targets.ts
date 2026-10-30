@@ -63,7 +63,22 @@ const exceptions: Partial<Record<string, string>> = {
   status: "a 14px-tall label where a one-pixel baseline difference dominates the area",
 };
 
+/** Navbar variants, compared with the navbar instances in the hero frames. */
+const navbars = [
+  { width: 1440, variant: "desktop", box: [1312, 46] },
+  { width: 834, variant: "tablet", box: [754, 44] },
+  { width: 390, variant: "mobile", box: [350, 44] },
+] as const;
+
 export const targets: FidelityTarget[] = [
+  ...navbars.map(({ width, variant, box }) => ({
+    name: `navbar-${String(width)}`,
+    path: "/en",
+    selector: `[data-navbar="${variant}"]`,
+    width,
+    // The Light button and monogram shadows (y +6) shift the export down.
+    designBox: { width: box[0], height: box[1], shadowOffset: { x: 0, y: 6 } },
+  })),
   ...Object.entries(components).map(([name, [width, height]]) => ({
     name: `component-${name}`,
     path: `/en/qa/${name}`,

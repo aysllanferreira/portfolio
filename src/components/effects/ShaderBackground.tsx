@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import { cn } from "@/lib/cn";
-import { isTestRender } from "@/lib/env";
+import { isTestRender } from "@/lib/render-mode";
 
 import { createShaderRenderer, type ShaderRenderer } from "./renderer";
 
