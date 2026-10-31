@@ -20,7 +20,7 @@ export const es = {
   },
   nav: {
     label: "Principal",
-    availability: "Disponible para nuevos roles",
+    availability: "Abierto a nuevos roles",
     hire: "Contrátame",
     links: {
       work: "Trabajo",

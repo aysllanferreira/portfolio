@@ -51,7 +51,8 @@ for (const target of targets) {
 
     // The fixed navbar belongs to the hero frame only; elsewhere it would cover the section.
     if (target.selector !== "#top" && !target.selector.startsWith("[data-navbar")) {
-      await page.addStyleTag({ content: "header { visibility: hidden; }" });
+      // Only the site banner: section headers are part of what is compared.
+      await page.addStyleTag({ content: "header:not(section header) { visibility: hidden; }" });
     }
 
     const capture = target.through
