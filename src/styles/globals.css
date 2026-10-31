@@ -142,3 +142,10 @@
     opacity: 0;
   }
 }
+
+/* Two identical runs side by side: moving one run's width loops seamlessly. */
+@keyframes ticker {
+  to {
+    transform: translateX(-50%);
+  }
+}
