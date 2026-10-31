@@ -92,7 +92,6 @@ export default async function Image({ params }: { params: Promise<{ lang: string
       }}
     >
       <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
-        {/* eslint-disable-next-line @next/next/no-img-element -- rendered to PNG, not HTML */}
         <img src={mark.url} width={(mark.width / mark.height) * 56} height={56} alt="" />
         <span
           style={{

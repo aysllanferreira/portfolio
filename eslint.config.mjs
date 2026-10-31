@@ -116,8 +116,15 @@ const eslintConfig = defineConfig([
       "@typescript-eslint/unbound-method": "off",
     },
   },
+  {
+    // Generated social images are rendered to PNG by next/og, where <img> is the only
+    // way to place a picture; next/image does not apply.
+    files: ["src/app/**/opengraph-image.tsx", "src/app/**/twitter-image.tsx"],
+    rules: { "@next/next/no-img-element": "off" },
+  },
   globalIgnores([
     ".next/**",
+    ".lighthouseci/**",
     "out/**",
     "build/**",
     "coverage/**",
