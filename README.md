@@ -30,22 +30,22 @@ The app needs `NEXT_PUBLIC_SITE_URL` and `NEXT_PUBLIC_ASSETS_URL` at build time.
 
 ## Scripts
 
-| Script                  | What it does                                                                  |
-| ----------------------- | ----------------------------------------------------------------------------- |
-| `npm run dev`           | Starts the development server                                                 |
-| `npm run build`         | Production build                                                              |
-| `npm run start`         | Serves the production build                                                   |
-| `npm run verify`        | The local quality gate: format check, lint, typecheck, unit tests, asset scan |
-| `npm run lint`          | ESLint with zero warnings allowed                                             |
-| `npm run typecheck`     | Generates route types and runs the TypeScript compiler                        |
-| `npm run format`        | Formats the codebase with Prettier                                            |
-| `npm test`              | Unit tests (Vitest)                                                           |
-| `npm run test:coverage` | Unit tests with coverage thresholds                                           |
-| `npm run test:e2e`      | End-to-end and accessibility tests against a production build                 |
-| `npm run assets:scan`   | Fails if an image, vector, font or document file is tracked in git            |
-| `npm run qa:fidelity`   | Compares every section and component with the design exports, pixel by pixel  |
-| `npm run budget:js`     | Fails if the first-load JavaScript of a built page exceeds its budget         |
-| `npm run lighthouse`    | Lighthouse CI on `/en`, `/pt` and `/es` with mobile budgets                   |
+| Script                  | What it does                                                                                |
+| ----------------------- | ------------------------------------------------------------------------------------------- |
+| `npm run dev`           | Starts the development server                                                               |
+| `npm run build`         | Production build                                                                            |
+| `npm run start`         | Serves the production build                                                                 |
+| `npm run verify`        | The local quality gate: format check, lint, typecheck, unit tests with coverage, asset scan |
+| `npm run lint`          | ESLint with zero warnings allowed                                                           |
+| `npm run typecheck`     | Generates route types and runs the TypeScript compiler                                      |
+| `npm run format`        | Formats the codebase with Prettier                                                          |
+| `npm test`              | Unit tests (Vitest)                                                                         |
+| `npm run test:coverage` | Unit tests with coverage thresholds                                                         |
+| `npm run test:e2e`      | End-to-end and accessibility tests against a production build                               |
+| `npm run assets:scan`   | Fails if an image, vector, font or document file is tracked in git                          |
+| `npm run qa:fidelity`   | Compares every section and component with the design exports, pixel by pixel                |
+| `npm run budget:js`     | Fails if the first-load JavaScript of a built page exceeds its budget                       |
+| `npm run lighthouse`    | Lighthouse CI on `/en`, `/pt` and `/es` with mobile budgets                                 |
 
 ## Project structure
 
