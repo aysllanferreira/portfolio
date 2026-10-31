@@ -64,6 +64,13 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx playwright install --with-deps ${{ matrix.browser }}
+      # CDN assets the tests replay (tests/support/playwright.ts); URLs are content-hashed,
+      # so an older cache stays valid and only new assets are downloaded.
+      - uses: actions/cache@v4
+        with:
+          path: node_modules/.cache/e2e-cdn
+          key: e2e-cdn-${{ matrix.browser }}-${{ hashFiles('src/content/assets.generated.ts') }}
+          restore-keys: e2e-cdn-${{ matrix.browser }}-
       - run: npx playwright test --project=${{ matrix.browser }}
       - uses: actions/upload-artifact@v5
         if: failure()

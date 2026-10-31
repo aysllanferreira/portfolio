@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "../support/playwright";
 
 /** Stack: the practices ticker respects reduced motion and hides its looping copy. */
 test.describe("stack", () => {

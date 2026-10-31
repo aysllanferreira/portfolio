@@ -1,8 +1,6 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 
-import { expect, test } from "@playwright/test";
-
 import {
   COLOR_THRESHOLD,
   compareImages,
@@ -11,6 +9,7 @@ import {
   type Comparison,
 } from "./compare";
 import { targets } from "./targets";
+import { expect, test } from "../support/playwright";
 
 /*
  * Design-fidelity check: captures each target in deterministic render mode and

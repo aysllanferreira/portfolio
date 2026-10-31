@@ -1,4 +1,6 @@
-import { expect, test, type Page } from "@playwright/test";
+import { type Page } from "@playwright/test";
+
+import { expect, test } from "../support/playwright";
 
 /**
  * Every image either describes itself in the page's language or is explicitly

@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "../support/playwright";
 
 /** Experience: the timeline drawing is decorative, its facts are readable. */
 test.describe("experience", () => {

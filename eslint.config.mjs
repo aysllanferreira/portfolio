@@ -117,6 +117,25 @@ const eslintConfig = defineConfig([
     },
   },
   {
+    // Browser tests take `test` from the shared fixture, which replays CDN assets from
+    // a local cache instead of downloading them on every page load.
+    files: ["tests/e2e/**/*.ts", "tests/fidelity/**/*.ts"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          paths: [
+            {
+              name: "@playwright/test",
+              importNames: ["test"],
+              message: "Import test from tests/support/playwright so CDN assets are cached.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
     // Generated social images are rendered to PNG by next/og, where <img> is the only
     // way to place a picture; next/image does not apply.
     files: ["src/app/**/opengraph-image.tsx", "src/app/**/twitter-image.tsx"],

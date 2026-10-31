@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "../support/playwright";
 
 /** Contact: every channel works, documents follow the page language. */
 test.describe("contact", () => {

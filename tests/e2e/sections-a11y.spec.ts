@@ -1,5 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
-import { expect, test } from "@playwright/test";
+
+import { expect, test } from "../support/playwright";
 
 /** Every built section passes axe at mobile and desktop widths. */
 const sections = ["#top", "#work", "#projects", "#experience", "#stack", "#about", "#contact"];

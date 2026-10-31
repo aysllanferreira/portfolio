@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "../support/playwright";
 
 test("fonts are self-hosted and preloaded from the site origin", async ({ page, baseURL }) => {
   const thirdPartyFontRequests: string[] = [];

@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "../support/playwright";
 
 /** No layout range may scroll sideways, in any language, from small phones to wide screens. */
 const widths = [320, 390, 834, 1280, 1440, 1920];

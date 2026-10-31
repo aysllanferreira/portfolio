@@ -1,6 +1,8 @@
 import AxeBuilder from "@axe-core/playwright";
-import { expect, test, type Page } from "@playwright/test";
+import { type Page } from "@playwright/test";
 import { PNG } from "pngjs";
+
+import { expect, test } from "../support/playwright";
 
 /*
  * The accessibility matrix: every language at every layout, with the menu closed and,

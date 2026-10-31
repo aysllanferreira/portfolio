@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "../support/playwright";
 
 /** All Projects: one keyboard stop per public project, safe links, CDN images, no shifts. */
 test.describe("all projects", () => {

@@ -1,4 +1,6 @@
-import { expect, test, type Page } from "@playwright/test";
+import { type Page } from "@playwright/test";
+
+import { expect, test } from "../support/playwright";
 
 const state = (page: Page, selector: string) => page.locator(`${selector} [data-shader-state]`);
 

@@ -1,5 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
-import { expect, test } from "@playwright/test";
+
+import { expect, test } from "../support/playwright";
 
 /** Every component fixture in the QA harness must pass axe with no serious or critical issues. */
 const fixtures = [

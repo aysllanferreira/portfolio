@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "../support/playwright";
 
 test("/favicon.ico permanently redirects to the CDN favicon", async ({ request }) => {
   const response = await request.get("/favicon.ico", { maxRedirects: 0 });

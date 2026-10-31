@@ -1,4 +1,6 @@
-import { expect, test, type Page } from "@playwright/test";
+import { type Page } from "@playwright/test";
+
+import { expect, test } from "../support/playwright";
 
 /*
  * Reflow and runtime hygiene: the page reads at 200% zoom and at 320px without

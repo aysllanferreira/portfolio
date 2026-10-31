@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "../support/playwright";
 
 test("the site responds and renders without console errors", async ({ page }) => {
   const errors: string[] = [];

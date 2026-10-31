@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "../support/playwright";
 
 const cases = [
   { header: "pt-BR,pt;q=0.9,en;q=0.8", expected: "/pt" },
