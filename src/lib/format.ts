@@ -46,3 +46,9 @@ export function monthsBetween(start: YearMonth, end: YearMonth): number {
     (to.getUTCFullYear() - from.getUTCFullYear()) * 12 + (to.getUTCMonth() - from.getUTCMonth())
   );
 }
+
+/** "United States" / "Estados Unidos": a country's name in the locale's words. */
+export function formatRegion(countryCode: string, locale: Locale): string {
+  const code = countryCode.toUpperCase();
+  return new Intl.DisplayNames(languageTags[locale], { type: "region" }).of(code) ?? code;
+}

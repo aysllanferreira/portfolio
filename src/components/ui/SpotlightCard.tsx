@@ -4,16 +4,58 @@ import { Lock } from "lucide-react";
 import { AssetImage } from "@/components/media/AssetImage";
 import type { RasterKey } from "@/lib/assets";
 import { cn } from "@/lib/cn";
+import { breakAfterSlashes } from "@/lib/typography";
 
 import { Flag, type CountryCode } from "./Flag";
 import { RoleCallout, TagList, type ProjectTag } from "./ProjectMeta";
 import { Tag } from "./Tag";
+
+import type { CSSProperties } from "react";
 
 export interface ScreenshotFrame {
   zoom: number;
   x: number;
   y: number;
 }
+
+const layouts = ["mobile", "tablet", "desktop"] as const;
+
+/** A frame per layout, for screenshots the design crops differently at each width. */
+export type ScreenshotFrames = Record<(typeof layouts)[number], ScreenshotFrame>;
+
+/**
+ * Frames are design data, so they travel as custom properties on the screenshot area
+ * and the image reads the one for the active layout through its responsive classes.
+ */
+function frameVariables(frame: ScreenshotFrame | ScreenshotFrames) {
+  const frames = "zoom" in frame ? { mobile: frame, tablet: frame, desktop: frame } : frame;
+  return Object.fromEntries(
+    layouts.flatMap((layout) => {
+      const { zoom, x, y } = frames[layout];
+      return [
+        [`--shot-w-${layout}`, `${String(zoom * 100)}%`],
+        [`--shot-x-${layout}`, `${String(-x * 100)}%`],
+        [`--shot-y-${layout}`, `${String(-y * 100)}%`],
+      ];
+    }),
+  ) as CSSProperties;
+}
+
+/*
+ * The large card leads the section, so its title and copy are set bigger from tablet
+ * up. Line heights are whole pixels (size × design ratio, rounded) as in the design.
+ */
+const sizes = {
+  default: { name: "text-h3 leading-[28px]", product: "", role: "" },
+  large: {
+    name: "text-[26px] leading-[30px] tracking-[-1.1px] tablet:text-[34px] tablet:leading-[39px]",
+    product: "tablet:text-[17px] tablet:leading-[26px]",
+    role: "tablet:text-[16px]",
+  },
+} as const;
+
+const framedImage =
+  "max-w-none origin-top-left w-(--shot-w-mobile) translate-x-(--shot-x-mobile) translate-y-(--shot-y-mobile) tablet:w-(--shot-w-tablet) tablet:translate-x-(--shot-x-tablet) tablet:translate-y-(--shot-y-tablet) desktop:w-(--shot-w-desktop) desktop:translate-x-(--shot-x-desktop) desktop:translate-y-(--shot-y-desktop)";
 
 export interface SpotlightCardProps {
   name: string;
@@ -36,10 +78,12 @@ export interface SpotlightCardProps {
    * Which part of the screenshot the design shows, from the design file's image
    * transform: `zoom` is how much wider than the frame the image is drawn, and `x`/`y`
    * are the fractions of its width and height scrolled out of view at the top-left.
+   * Pass one frame for every layout, or one per layout.
    */
-  screenshotFrame?: ScreenshotFrame | undefined;
+  screenshotFrame?: ScreenshotFrame | ScreenshotFrames | undefined;
   /** Height and layout of the screenshot area; the large card shows more of it. */
   screenshotClassName?: string | undefined;
+  size?: keyof typeof sizes;
   className?: string;
 }
 
@@ -64,15 +108,9 @@ export function SpotlightCard({
   newTabHint,
   screenshotFrame,
   screenshotClassName,
+  size = "default",
   className,
 }: SpotlightCardProps) {
-  // Frames are design data, so they are applied as computed styles rather than classes.
-  const frameStyle = screenshotFrame && {
-    width: `${String(screenshotFrame.zoom * 100)}%`,
-    maxWidth: "none",
-    transform: `translate(${String(-screenshotFrame.x * 100)}%, ${String(-screenshotFrame.y * 100)}%)`,
-  };
-
   return (
     <article
       className={cn(
@@ -84,17 +122,19 @@ export function SpotlightCard({
         <Lock aria-hidden className="size-3 text-text-faint" strokeWidth={2.2} />
         <span className="font-mono text-[11px] tracking-[0.4px] text-text-muted">{domain}</span>
       </div>
-      <div className={cn("relative h-[220px] overflow-hidden bg-white", screenshotClassName)}>
+      <div
+        className={cn("relative h-[220px] overflow-hidden bg-white", screenshotClassName)}
+        style={screenshotFrame && frameVariables(screenshotFrame)}
+      >
         <AssetImage
           name={screenshot}
           alt={screenshotAlt}
           sizes={screenshotSizes}
-          className={cn("size-full", frameStyle && "absolute inset-0")}
-          imgClassName={cn(frameStyle ? "origin-top-left" : "size-full object-cover object-top")}
-          imgStyle={frameStyle}
+          className={cn("size-full", screenshotFrame && "absolute inset-0")}
+          imgClassName={screenshotFrame ? framedImage : "size-full object-cover object-top"}
         />
       </div>
-      <div className="flex flex-col gap-3.5 px-7 pt-6 pb-7">
+      <div className="flex flex-col gap-3.5 px-5 pt-5 pb-6 tablet:px-7 tablet:pt-6 tablet:pb-7">
         <div className="flex items-center gap-2.5">
           <Flag country={country} />
           <p className="flex-1 font-mono text-caption tracking-[0.4px] text-text-muted uppercase">
@@ -102,7 +142,7 @@ export function SpotlightCard({
           </p>
           {badge && <Tag tone="accent">{badge}</Tag>}
         </div>
-        <h3 className="text-h3 leading-[1.15] font-medium text-text-primary">
+        <h3 className={cn("font-medium text-text-primary", sizes[size].name)}>
           <a
             href={href}
             target="_blank"
@@ -112,9 +152,17 @@ export function SpotlightCard({
             {name} <span className="sr-only">({newTabHint})</span>
           </a>
         </h3>
-        <p className="text-body leading-[1.55] text-text-muted">{product}</p>
-        <RoleCallout label={roleLabel} role={role} className="pl-3.5" />
-        <TagList tags={tags} className="gap-2" />
+        <p className={cn("text-body leading-[23px] text-text-muted", sizes[size].product)}>
+          {breakAfterSlashes(product)}
+        </p>
+        <RoleCallout
+          label={roleLabel}
+          role={role}
+          className="pl-3.5"
+          roleClassName={sizes[size].role}
+        />
+        {/* On phones the design lets one row of tags run into the padding rather than wrap. */}
+        <TagList tags={tags} className="-mr-2 gap-2 tablet:mr-0" />
       </div>
     </article>
   );

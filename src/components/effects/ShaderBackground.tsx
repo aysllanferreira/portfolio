@@ -53,17 +53,26 @@ export function ShaderBackground({ config, className }: ShaderBackgroundProps) {
     const startedAt = performance.now();
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
+    // Time of the frame on the canvas; a frozen clock (test renders) is drawn only once.
+    let drawnAt: number | null = null;
+
+    const draw = () => {
+      const time = isTestRender ? 0 : (performance.now() - startedAt) / 1000;
+      if (!renderer || time === drawnAt) return;
+      renderer.render(time);
+      drawnAt = time;
+      canvas?.classList.add("opacity-100");
+    };
+
     const resize = () => {
       if (!canvas || !renderer) return;
       const { width, height } = canvas.getBoundingClientRect();
+      // Resizing a canvas clears it, so the frame is redrawn even when not animating.
       renderer.resize(width, height, window.devicePixelRatio);
+      drawnAt = null;
+      if (!frame) draw();
     };
     const resizing = new ResizeObserver(resize);
-
-    const draw = () => {
-      renderer?.render(isTestRender ? 0 : (performance.now() - startedAt) / 1000);
-      canvas?.classList.add("opacity-100");
-    };
 
     const loop = () => {
       draw();

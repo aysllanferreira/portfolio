@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest";
 
-import { formatMonthRange, formatMonthYear, formatNumber, monthsBetween } from "./format";
+import {
+  formatMonthRange,
+  formatMonthYear,
+  formatNumber,
+  formatRegion,
+  monthsBetween,
+} from "./format";
 
 describe("formatMonthYear", () => {
   it("uses each locale's month names without trailing abbreviation dots", () => {
@@ -28,6 +34,15 @@ describe("formatNumber", () => {
   it("groups digits per locale", () => {
     expect(formatNumber(3000, "en")).toBe("3,000");
     expect(formatNumber(3000, "pt")).toBe("3.000");
+  });
+});
+
+describe("formatRegion", () => {
+  it("names countries in each language", () => {
+    expect(formatRegion("us", "en")).toBe("United States");
+    expect(formatRegion("cz", "en")).toBe("Czechia");
+    expect(formatRegion("gb", "pt")).toBe("Reino Unido");
+    expect(formatRegion("br", "es")).toBe("Brasil");
   });
 });
 

@@ -68,6 +68,17 @@ const twMerge = extendTailwindMerge<FluidClassGroup>({
       "fluid-p": ["fluid-px", "fluid-py", "fluid-pt", "fluid-pb"],
       "fluid-py": ["fluid-pt", "fluid-pb"],
       "fluid-gap": ["fluid-gap-x", "fluid-gap-y"],
+      // A fluid size replaces a fixed one in either order, e.g. a section overriding
+      // a component default of `h-[220px]` with `fluid-h-200`.
+      "fluid-text": ["font-size"],
+      "font-size": ["fluid-text"],
+      "fluid-w": ["w", "size"],
+      w: ["fluid-w"],
+      "fluid-h": ["h", "size"],
+      h: ["fluid-h"],
+      size: ["fluid-w", "fluid-h"],
+      "fluid-max-w": ["max-w"],
+      "max-w": ["fluid-max-w"],
     },
   },
 });

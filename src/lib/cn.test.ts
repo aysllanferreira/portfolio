@@ -24,4 +24,12 @@ describe("cn", () => {
     );
     expect(cn("fluid-pt-72 fluid-pb-48", "fluid-py-96")).toBe("fluid-py-96");
   });
+
+  it("lets fluid and fixed sizes replace each other", () => {
+    expect(cn("h-[220px]", "fluid-h-200 tablet:fluid-h-220")).toBe(
+      "fluid-h-200 tablet:fluid-h-220",
+    );
+    expect(cn("fluid-w-400", "w-full")).toBe("w-full");
+    expect(cn("text-[16px]", "fluid-text-34")).toBe("fluid-text-34");
+  });
 });

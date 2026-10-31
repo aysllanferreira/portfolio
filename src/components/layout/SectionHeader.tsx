@@ -38,7 +38,7 @@ export function SectionHeader({
       )}
     >
       <div className="flex flex-col gap-6">
-        <Eyebrow>{eyebrow}</Eyebrow>
+        <Eyebrow labelClassName="text-[11px] tablet:text-[13px]">{eyebrow}</Eyebrow>
         <AccentHeadline
           as="h2"
           id={titleId}

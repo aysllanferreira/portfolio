@@ -12,10 +12,12 @@ export function RoleCallout({
   label,
   role,
   className,
+  roleClassName,
 }: {
   label: string;
   role: string;
   className?: string;
+  roleClassName?: string;
 }) {
   return (
     <div
@@ -27,7 +29,7 @@ export function RoleCallout({
       <span className="font-mono text-[10px] tracking-[0.4px] text-text-faint uppercase">
         {label}
       </span>
-      <p className="text-[14px] leading-normal text-text-primary">{role}</p>
+      <p className={cn("text-[14px] leading-[1.5] text-text-primary", roleClassName)}>{role}</p>
     </div>
   );
 }

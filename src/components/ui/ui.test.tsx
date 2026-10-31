@@ -179,11 +179,37 @@ describe("project cards", () => {
         screenshotFrame={{ zoom: 1.5, x: 0, y: 0.45 }}
       />,
     );
-    const screenshot = screen.getByRole("img", { name: "Privacy Lock dashboard" });
-    expect(screenshot.style.width).toBe("150%");
-    expect(screenshot.style.transform).toBe("translate(0%, -45%)");
+    const area = screen.getByRole("img", { name: "Privacy Lock dashboard" }).closest("div");
+    expect(area?.style.getPropertyValue("--shot-w-mobile")).toBe("150%");
+    expect(area?.style.getPropertyValue("--shot-y-desktop")).toBe("-45%");
     expect(screen.getByText("Deterministic AI")).toBeInTheDocument();
     expect(screen.getAllByRole("link")).toHaveLength(1);
+  });
+
+  it("SpotlightCard crops its screenshot per layout when given a frame for each", () => {
+    render(
+      <SpotlightCard
+        {...card}
+        screenshot="screenshots/investable"
+        screenshotAlt="Investable home page"
+        screenshotSizes="528px"
+        screenshotFrame={{
+          mobile: { zoom: 1.5, x: 0, y: 0 },
+          tablet: { zoom: 2, x: 0, y: 0 },
+          desktop: { zoom: 1, x: 0.1, y: 0 },
+        }}
+      />,
+    );
+    const area = screen.getByRole("img", { name: "Investable home page" }).closest("div");
+    expect(area?.style.getPropertyValue("--shot-w-tablet")).toBe("200%");
+    expect(area?.style.getPropertyValue("--shot-x-desktop")).toBe("-10%");
+  });
+
+  it("ProjectCard without a site is plain text, not a link", () => {
+    render(<ProjectCard {...card} href={undefined} domain="private product" />);
+    expect(screen.queryByRole("link")).not.toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Orchard Mental Health" })).toBeInTheDocument();
+    expect(screen.getByText("private product")).toBeInTheDocument();
   });
 });
 
