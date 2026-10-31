@@ -6,6 +6,9 @@ export const es = {
     title: "Aysllan Ferreira · Ingeniero de Software Sénior",
     description:
       "Ingeniero de Software Sénior con más de 5 años y 30+ productos lanzados, de TPV en 100+ restaurantes de EE. UU. a plataformas de salud y fintech.",
+    jobTitle: "Ingeniero de Software Sénior",
+    ogAlt:
+      "Aysllan Ferreira, Ingeniero de Software Sénior: construyo software por el que la gente paga.",
   },
   a11y: {
     skipToContent: "Saltar al contenido",

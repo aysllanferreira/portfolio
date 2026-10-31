@@ -7,6 +7,8 @@ export const en = {
     title: "Aysllan Ferreira · Senior Software Engineer",
     description:
       "Senior Software Engineer with 5+ years shipping 30+ products, from POS software in 100+ US restaurants to HIPAA-compliant healthcare and fintech platforms.",
+    jobTitle: "Senior Software Engineer",
+    ogAlt: "Aysllan Ferreira, Senior Software Engineer: I build software people pay for.",
   },
   a11y: {
     skipToContent: "Skip to content",
