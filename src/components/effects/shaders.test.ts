@@ -11,7 +11,7 @@ import { projectsBackground } from "@/features/projects/background";
 import { selectedWorkBackground } from "@/features/selected-work/background";
 import { stackBackground } from "@/features/stack/background";
 
-import { capDpr, hexToVec3, MAX_DPR, resolveUniforms } from "./renderer";
+import { capDpr, createShaderRenderer, hexToVec3, MAX_DPR, resolveUniforms } from "./renderer";
 import { heroShader } from "./shaders/hero.frag";
 import { sectionShader } from "./shaders/section.frag";
 import pencilShaders from "../../../tests/fixtures/pencil-shaders.json";
@@ -108,6 +108,19 @@ describe("renderer helpers", () => {
     expect(resolved.u_grain).toBe(0.04);
     expect(resolved.u_base).toEqual(hexToVec3("#0A0A0F"));
     expect(resolveUniforms(experienceBackground, { u_grain: 0 }).u_grain).toBe(0);
+  });
+
+  it("asks for a hardware context unless software rendering is allowed", () => {
+    const contexts: WebGLContextAttributes[] = [];
+    const canvas = {
+      getContext: (_type: string, attributes: WebGLContextAttributes) => {
+        contexts.push(attributes);
+        return null;
+      },
+    } as unknown as HTMLCanvasElement;
+    expect(createShaderRenderer(canvas, experienceBackground)).toBeNull();
+    createShaderRenderer(canvas, experienceBackground, { allowSoftwareRendering: true });
+    expect(contexts.map((context) => context.failIfMajorPerformanceCaveat)).toEqual([true, false]);
   });
 });
 

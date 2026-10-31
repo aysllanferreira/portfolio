@@ -29,11 +29,9 @@ test.describe("contact", () => {
   }
 
   test("the wordmark never overflows the page", async ({ page }) => {
-    // Four page loads at different widths; slower browsers on CI need the extra time.
-    test.slow();
+    await page.goto("/en");
     for (const width of [320, 390, 834, 1440]) {
       await page.setViewportSize({ width, height: 900 });
-      await page.goto("/en");
       const overflow = await page.locator("#contact").evaluate((section) => {
         const wordmark = section.querySelector('[aria-hidden="true"] p');
         if (!wordmark) return null;

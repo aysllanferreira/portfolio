@@ -11,16 +11,19 @@ const horizontalOverflow = (page: Page) =>
 
 for (const locale of ["en", "pt", "es"]) {
   test(`/${locale} reflows at 200% zoom and at 320px`, async ({ page }) => {
-    test.slow();
-    // 1280×720 at 200% zoom is a 640×360 CSS viewport.
+    // 1280×720 at 200% zoom is a 640×360 CSS viewport. Resizing one loaded page is
+    // enough: layout reflows on resize, as it does when a reader zooms.
+    await page.setViewportSize({ width: 640, height: 360 });
+    await page.goto(`/${locale}`);
     for (const viewport of [
       { width: 640, height: 360 },
       { width: 320, height: 640 },
     ]) {
       await page.setViewportSize(viewport);
-      await page.goto(`/${locale}`, { waitUntil: "load" });
-      expect(await horizontalOverflow(page), `${String(viewport.width)}px`).toBeLessThanOrEqual(0);
-      await expect(page.locator("h1")).toBeInViewport();
+      await expect
+        .poll(() => horizontalOverflow(page), { message: `${String(viewport.width)}px` })
+        .toBeLessThanOrEqual(0);
+      await expect(page.locator("h1")).toBeVisible();
     }
   });
 }

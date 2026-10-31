@@ -62,7 +62,18 @@ export interface ShaderRenderer {
 export function createShaderRenderer(
   canvas: HTMLCanvasElement,
   config: ShaderConfig,
-  overrides?: Partial<Record<`u_${string}`, number>>,
+  {
+    overrides,
+    allowSoftwareRendering = false,
+  }: {
+    overrides?: Partial<Record<`u_${string}`, number>> | undefined;
+    /**
+     * Without a GPU, browsers emulate WebGL on the CPU, where a full-screen shader
+     * costs seconds of main-thread time; such devices get the static background.
+     * Test renders allow it, so headless screenshots still include the shader.
+     */
+    allowSoftwareRendering?: boolean;
+  } = {},
 ): ShaderRenderer | null {
   const gl = canvas.getContext("webgl", {
     alpha: false,
@@ -71,6 +82,7 @@ export function createShaderRenderer(
     stencil: false,
     powerPreference: "low-power",
     preserveDrawingBuffer: false,
+    failIfMajorPerformanceCaveat: !allowSoftwareRendering,
   });
   if (!gl) return null;
 

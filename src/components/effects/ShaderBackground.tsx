@@ -105,7 +105,10 @@ export function ShaderBackground({ config, className }: ShaderBackgroundProps) {
       canvas = document.createElement("canvas");
       canvas.className = CANVAS_CLASSES;
       wrapper.append(canvas);
-      renderer = createShaderRenderer(canvas, config, TEST_OVERRIDES);
+      renderer = createShaderRenderer(canvas, config, {
+        overrides: TEST_OVERRIDES,
+        allowSoftwareRendering: isTestRender,
+      });
       if (!renderer) {
         onContextLost();
         return false;
