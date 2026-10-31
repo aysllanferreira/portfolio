@@ -55,6 +55,15 @@ export interface ShaderRenderer {
   dispose(): void;
 }
 
+/** True when WebGL is emulated on the CPU (SwiftShader, llvmpipe and similar). */
+export function isSoftwareRenderer(gl: WebGLRenderingContext): boolean {
+  const debug = gl.getExtension("WEBGL_debug_renderer_info");
+  const renderer = String(
+    gl.getParameter(debug ? debug.UNMASKED_RENDERER_WEBGL : gl.RENDERER) ?? "",
+  );
+  return /swiftshader|llvmpipe|softpipe|software|basic render/i.test(renderer);
+}
+
 /**
  * Compiles a full-screen fragment shader. Returns null when WebGL is unavailable or
  * the program fails to build, so callers can fall back to a static background.
@@ -85,6 +94,11 @@ export function createShaderRenderer(
     failIfMajorPerformanceCaveat: !allowSoftwareRendering,
   });
   if (!gl) return null;
+  // Some browsers still hand out an emulated context; name the renderer to be sure.
+  if (!allowSoftwareRendering && isSoftwareRenderer(gl)) {
+    gl.getExtension("WEBGL_lose_context")?.loseContext();
+    return null;
+  }
 
   const program = buildProgram(gl, VERTEX_SHADER, fragmentSources[config.kind]);
   if (!program) return null;

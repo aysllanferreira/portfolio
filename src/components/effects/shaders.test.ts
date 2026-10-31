@@ -11,7 +11,14 @@ import { projectsBackground } from "@/features/projects/background";
 import { selectedWorkBackground } from "@/features/selected-work/background";
 import { stackBackground } from "@/features/stack/background";
 
-import { capDpr, createShaderRenderer, hexToVec3, MAX_DPR, resolveUniforms } from "./renderer";
+import {
+  capDpr,
+  createShaderRenderer,
+  hexToVec3,
+  isSoftwareRenderer,
+  MAX_DPR,
+  resolveUniforms,
+} from "./renderer";
 import { heroShader } from "./shaders/hero.frag";
 import { sectionShader } from "./shaders/section.frag";
 import pencilShaders from "../../../tests/fixtures/pencil-shaders.json";
@@ -108,6 +115,22 @@ describe("renderer helpers", () => {
     expect(resolved.u_grain).toBe(0.04);
     expect(resolved.u_base).toEqual(hexToVec3("#0A0A0F"));
     expect(resolveUniforms(experienceBackground, { u_grain: 0 }).u_grain).toBe(0);
+  });
+
+  it("recognizes CPU-emulated WebGL renderers", () => {
+    const glNamed = (name: string) =>
+      ({
+        RENDERER: 0x1f01,
+        getExtension: () => ({ UNMASKED_RENDERER_WEBGL: 0x9246 }),
+        getParameter: () => name,
+      }) as unknown as WebGLRenderingContext;
+    expect(isSoftwareRenderer(glNamed("ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device))"))).toBe(
+      true,
+    );
+    expect(isSoftwareRenderer(glNamed("llvmpipe (LLVM 15.0.7, 256 bits)"))).toBe(true);
+    expect(isSoftwareRenderer(glNamed("ANGLE (Apple, ANGLE Metal Renderer: Apple M2)"))).toBe(
+      false,
+    );
   });
 
   it("asks for a hardware context unless software rendering is allowed", () => {
