@@ -216,7 +216,98 @@ export const en = {
       },
     },
   },
-  experience: {},
+  experience: {
+    eyebrow: "02 — Experience",
+    outline: "Career",
+    title: { before: "Building products,\ngrowing ", accent: "teams.", after: "" },
+    intro:
+      "5+ years across a global software studio, product and contract roles, often in parallel. Senior engineer since 2024.",
+    engagements: { fullTime: "Full-time", contract: "Contract", partTime: "Part-time" },
+    remote: "Remote",
+    present: "Present",
+    timeline: {
+      legendLabel: "Engagement types",
+      axisLabel: "Role",
+      now: "Now",
+      listLabel: "Roles over time",
+      listItem: "{role} at {company}, {engagement}: {period}",
+    },
+    roles: {
+      "pinely-senior": {
+        title: "Senior Software Engineer",
+        shortTitle: "Senior Software Engineer",
+        summary:
+          "Technical pre-sales, system design and engineering education at a global software studio.",
+        highlights: [
+          "Lead pre-sales calls that turn business needs into signed projects",
+          "Design architecture, roadmaps and estimates from MVP to production",
+          "Tutor of Engineering Sync: live classes for 20+ developers",
+        ],
+        numbers: [
+          { value: "30+", label: "MVPs delivered" },
+          { value: "US$270K+", label: "Revenue contributed" },
+        ],
+      },
+      vituax: {
+        title: "Product Owner",
+        shortTitle: "Product Owner",
+        summary: "Took a Brazilian cloud provider's platform from idea to a paid MVP.",
+        highlights: [
+          "Launched VPS hosting with DDoS protection, S3-compatible storage and managed databases",
+          "Wrote user stories and refined the backlog with engineering",
+          "Gave cloud computing talks in Rio Grande do Sul",
+        ],
+        numbers: [{ value: "100+", label: "Active VPS instances" }],
+      },
+      intellux: {
+        title: "Senior Software Engineer",
+        shortTitle: "Senior Software Engineer",
+        summary:
+          "Brought self-hosted generative AI into the product and helped grow a junior-heavy team.",
+        highlights: [
+          "Self-hosted ComfyUI behind a NestJS API, with dynamic Python workflows",
+          "Secure AWS EC2 tunnel and reverse proxy to an IP-restricted VPS",
+          "Introduced Agile practices and mentored junior developers",
+        ],
+        numbers: [{ value: "0", label: "Paid image APIs needed" }],
+      },
+      "pinely-full-stack": {
+        title: "Full Stack Software Engineer",
+        shortTitle: "Full Stack Engineer",
+        summary: "Shipped products for clients across the USA, Canada, Europe and Asia.",
+        highlights: [
+          "POS integrations running in 100+ US restaurants",
+          "Rescued a Nordic ticketing app: Prisma 1 → 2 with Apollo GraphQL",
+          "Serverless real-estate platform sending 1M+ emails a month",
+        ],
+        numbers: [{ value: "20+", label: "Projects delivered" }],
+      },
+      trybe: {
+        title: "Full Stack Software Engineer",
+        shortTitle: "Full Stack Engineer · curriculum",
+        summary: "Reviewed and improved the curriculum of Trybe's Full-Stack program.",
+        highlights: [
+          "Automated grading suites with Jest, RTL, Mocha, Chai and Sinon",
+          "Algorithm and data structure exercises for interview prep",
+        ],
+        numbers: [{ value: "3,000+", label: "Students impacted" }],
+      },
+    },
+    testimonial: { role: "Managed Aysllan directly at Pinely" },
+    teaching: {
+      title: "Teaching & community",
+      items: {
+        taught: { value: "20+", label: "Developers taught in Pinely's Engineering Sync program" },
+        students: {
+          value: "3,000+",
+          label: "Students reached through Trybe's curriculum and graders",
+        },
+        talks: { value: "Talks", label: "On cloud computing in Rio Grande do Sul" },
+        ambassador: { value: "Elected", label: "Class ambassador by his Trybe classmates" },
+        recommendations: { value: "19", label: "Recommendations from managers, mentors and peers" },
+      },
+    },
+  },
   stack: {},
   about: {},
   contact: {},

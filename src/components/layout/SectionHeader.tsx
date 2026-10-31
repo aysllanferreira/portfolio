@@ -11,6 +11,8 @@ interface SectionHeaderProps {
   titleId: string;
   /** Right-hand column on desktop (an intro paragraph, a legend), stacked below elsewhere. */
   aside?: ReactNode;
+  /** Eyebrow label size, for sections whose design sets it smaller on phones. */
+  eyebrowClassName?: string;
   /** Title sizes per layout; sections differ slightly in the design. */
   titleClassName?: string;
   accentClassName?: string;
@@ -26,6 +28,7 @@ export function SectionHeader({
   title,
   titleId,
   aside,
+  eyebrowClassName,
   titleClassName,
   accentClassName,
   className,
@@ -38,7 +41,7 @@ export function SectionHeader({
       )}
     >
       <div className="flex flex-col gap-6">
-        <Eyebrow labelClassName="text-[11px] tablet:text-[13px]">{eyebrow}</Eyebrow>
+        <Eyebrow labelClassName={eyebrowClassName}>{eyebrow}</Eyebrow>
         <AccentHeadline
           as="h2"
           id={titleId}

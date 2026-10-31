@@ -7,7 +7,7 @@ import { Stat } from "./Stat";
 export interface RoleRowProps {
   /** Already formatted for the locale, e.g. "Sep 2025 — Jun 2026". */
   period: string;
-  /** Ongoing roles show a live dot. */
+  /** The ongoing role shows a live dot and accents its dates and numbers. */
   current: boolean;
   country: CountryCode;
   company: string;
@@ -20,7 +20,10 @@ export interface RoleRowProps {
   className?: string;
 }
 
-/** One role in the experience list: where and when, what was done, and the numbers. */
+/**
+ * One role in the experience list: where and when, what was done, and the numbers.
+ * Three columns on desktop; stacked, with the numbers in a row, below that.
+ */
 export function RoleRow({
   period,
   current,
@@ -36,12 +39,17 @@ export function RoleRow({
   return (
     <article
       className={cn(
-        "grid gap-6 py-9 shadow-[inset_0_1px_0_var(--color-border)] tablet:grid-cols-[minmax(0,240px)_1fr] tablet:gap-x-10 desktop:grid-cols-[300px_1fr_220px] desktop:gap-12",
+        "flex flex-col gap-4 py-7 shadow-[inset_0_1px_0_var(--color-border)] tablet:gap-5 tablet:py-9 desktop:flex-row desktop:gap-12",
         className,
       )}
     >
-      <div className="flex flex-col gap-2.5">
-        <p className="flex items-center gap-2 font-mono text-caption tracking-[0.4px] text-text-muted uppercase">
+      <div className="flex flex-col gap-2.5 desktop:w-[300px] desktop:shrink-0">
+        <p
+          className={cn(
+            "flex items-center gap-2 font-mono text-caption tracking-[0.4px] uppercase",
+            current ? "text-accent" : "text-text-muted",
+          )}
+        >
           {current && (
             <span
               aria-hidden
@@ -59,12 +67,14 @@ export function RoleRow({
         </p>
       </div>
 
-      <div className="flex flex-col gap-3">
-        <h3 className="text-[26px] font-medium tracking-[-0.8px] text-text-primary">{role}</h3>
-        <p className="text-[16px] leading-[1.55] text-text-muted">{summary}</p>
+      <div className="flex min-w-0 flex-1 flex-col gap-3">
+        <h3 className="text-[22px] leading-[29px] font-medium tracking-[-0.8px] text-text-primary tablet:text-[26px] tablet:leading-[34px]">
+          {role}
+        </h3>
+        <p className="text-[16px] leading-[25px] text-text-muted">{summary}</p>
         <ul className="flex flex-col gap-2 pt-1.5">
           {highlights.map((highlight) => (
-            <li key={highlight} className="flex gap-3 text-[15px] leading-normal text-text-primary">
+            <li key={highlight} className="flex gap-3 text-[15px] leading-[23px] text-text-primary">
               <span aria-hidden className="font-mono text-[14px] text-accent">
                 →
               </span>
@@ -74,14 +84,14 @@ export function RoleRow({
         </ul>
       </div>
 
-      <dl className="flex flex-wrap gap-5 tablet:col-start-2 desktop:col-start-auto desktop:flex-col">
+      <dl className="flex gap-7 tablet:gap-12 desktop:w-[220px] desktop:shrink-0 desktop:flex-col desktop:gap-5">
         {numbers.map((number) => (
           <Stat
             key={number.label}
             value={number.value}
             label={number.label}
-            className="gap-1"
-            labelClassName="text-[11px] tracking-[0.4px]"
+            valueClassName={cn("text-[28px] tablet:text-[36px]", current && "text-accent")}
+            labelClassName="text-[11px]"
           />
         ))}
       </dl>

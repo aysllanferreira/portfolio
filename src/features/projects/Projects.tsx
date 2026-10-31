@@ -33,6 +33,7 @@ export async function Projects() {
         eyebrow={projects.eyebrow}
         title={projects.title}
         titleId="projects-title"
+        eyebrowClassName="text-[11px] tablet:text-[13px]"
         className="gap-8"
         aside={
           <CountryList

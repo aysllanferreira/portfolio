@@ -216,7 +216,104 @@ export const pt = {
       },
     },
   },
-  experience: {},
+  experience: {
+    eyebrow: "02 — Experiência",
+    outline: "Carreira",
+    title: { before: "Construindo produtos,\nformando ", accent: "times.", after: "" },
+    intro:
+      "5+ anos entre um estúdio global de software, papéis de produto e contratos, muitas vezes em paralelo. Engenheiro sênior desde 2024.",
+    engagements: { fullTime: "Tempo integral", contract: "Contrato", partTime: "Meio período" },
+    remote: "Remoto",
+    present: "Atual",
+    timeline: {
+      legendLabel: "Tipos de vínculo",
+      axisLabel: "Cargo",
+      now: "Hoje",
+      listLabel: "Cargos ao longo do tempo",
+      listItem: "{role} na {company}, {engagement}: {period}",
+    },
+    roles: {
+      "pinely-senior": {
+        title: "Engenheiro de Software Sênior",
+        shortTitle: "Engenheiro de Software Sênior",
+        summary:
+          "Pré-vendas técnica, design de sistemas e formação de engenheiros em um estúdio global de software.",
+        highlights: [
+          "Conduzo reuniões de pré-vendas que transformam necessidades de negócio em projetos fechados",
+          "Desenho arquitetura, roadmaps e estimativas do MVP à produção",
+          "Tutor do Engineering Sync: aulas ao vivo para 20+ desenvolvedores",
+        ],
+        numbers: [
+          { value: "30+", label: "MVPs entregues" },
+          { value: "US$270K+", label: "Receita gerada" },
+        ],
+      },
+      vituax: {
+        title: "Product Owner",
+        shortTitle: "Product Owner",
+        summary: "Levei a plataforma de um provedor de nuvem brasileiro da ideia a um MVP pago.",
+        highlights: [
+          "Lancei hospedagem VPS com proteção DDoS, armazenamento compatível com S3 e bancos de dados gerenciados",
+          "Escrevi histórias de usuário e refinei o backlog com a engenharia",
+          "Dei palestras sobre computação em nuvem no Rio Grande do Sul",
+        ],
+        numbers: [{ value: "100+", label: "Instâncias VPS ativas" }],
+      },
+      intellux: {
+        title: "Engenheiro de Software Sênior",
+        shortTitle: "Engenheiro de Software Sênior",
+        summary:
+          "Trouxe IA generativa auto-hospedada para o produto e ajudei a desenvolver um time majoritariamente júnior.",
+        highlights: [
+          "ComfyUI auto-hospedado por trás de uma API NestJS, com workflows dinâmicos em Python",
+          "Túnel seguro na AWS EC2 e proxy reverso para uma VPS com restrição de IP",
+          "Introduzi práticas ágeis e mentorei desenvolvedores júnior",
+        ],
+        numbers: [{ value: "0", label: "APIs de imagem pagas necessárias" }],
+      },
+      "pinely-full-stack": {
+        title: "Engenheiro de Software Full Stack",
+        shortTitle: "Engenheiro Full Stack",
+        summary: "Entreguei produtos para clientes nos EUA, Canadá, Europa e Ásia.",
+        highlights: [
+          "Integrações de PDV rodando em 100+ restaurantes nos EUA",
+          "Resgatei um app nórdico de ingressos: Prisma 1 → 2 com Apollo GraphQL",
+          "Plataforma imobiliária serverless enviando 1M+ e-mails por mês",
+        ],
+        numbers: [{ value: "20+", label: "Projetos entregues" }],
+      },
+      trybe: {
+        title: "Engenheiro de Software Full Stack",
+        shortTitle: "Engenheiro Full Stack · currículo",
+        summary: "Revisei e melhorei o currículo do programa Full-Stack da Trybe.",
+        highlights: [
+          "Suítes de correção automática com Jest, RTL, Mocha, Chai e Sinon",
+          "Exercícios de algoritmos e estruturas de dados para entrevistas",
+        ],
+        numbers: [{ value: "3.000+", label: "Alunos impactados" }],
+      },
+    },
+    testimonial: { role: "Gestor direto do Aysllan na Pinely" },
+    teaching: {
+      title: "Ensino e comunidade",
+      items: {
+        taught: {
+          value: "20+",
+          label: "Desenvolvedores formados no programa Engineering Sync da Pinely",
+        },
+        students: {
+          value: "3.000+",
+          label: "Alunos alcançados pelo currículo e pelos corretores da Trybe",
+        },
+        talks: { value: "Palestras", label: "Sobre computação em nuvem no Rio Grande do Sul" },
+        ambassador: { value: "Eleito", label: "Embaixador da turma pelos colegas da Trybe" },
+        recommendations: {
+          value: "19",
+          label: "Recomendações de gestores, mentores e colegas",
+        },
+      },
+    },
+  },
   stack: {},
   about: {},
   contact: {},

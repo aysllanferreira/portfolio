@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  addMonths,
   formatMonthRange,
   formatMonthYear,
   formatNumber,
@@ -43,6 +44,14 @@ describe("formatRegion", () => {
     expect(formatRegion("cz", "en")).toBe("Czechia");
     expect(formatRegion("gb", "pt")).toBe("Reino Unido");
     expect(formatRegion("br", "es")).toBe("Brasil");
+  });
+});
+
+describe("addMonths", () => {
+  it("moves across year boundaries in both directions", () => {
+    expect(addMonths("2026-10", 2)).toBe("2026-12");
+    expect(addMonths("2026-11", 3)).toBe("2027-02");
+    expect(addMonths("2023-01", -1)).toBe("2022-12");
   });
 });
 

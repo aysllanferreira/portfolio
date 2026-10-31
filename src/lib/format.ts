@@ -52,3 +52,12 @@ export function formatRegion(countryCode: string, locale: Locale): string {
   const code = countryCode.toUpperCase();
   return new Intl.DisplayNames(languageTags[locale], { type: "region" }).of(code) ?? code;
 }
+
+/** The month `count` months after (or before, when negative) the given one. */
+export function addMonths(month: YearMonth, count: number): YearMonth {
+  const date = toDate(month);
+  date.setUTCMonth(date.getUTCMonth() + count);
+  const year = String(date.getUTCFullYear());
+  const monthNumber = String(date.getUTCMonth() + 1).padStart(2, "0");
+  return `${year}-${monthNumber}` as YearMonth;
+}
