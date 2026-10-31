@@ -43,21 +43,84 @@ The app needs `NEXT_PUBLIC_SITE_URL` and `NEXT_PUBLIC_ASSETS_URL` at build time.
 | `npm run test:coverage` | Unit tests with coverage thresholds                                           |
 | `npm run test:e2e`      | End-to-end and accessibility tests against a production build                 |
 | `npm run assets:scan`   | Fails if an image, vector, font or document file is tracked in git            |
+| `npm run qa:fidelity`   | Compares every section and component with the design exports, pixel by pixel  |
+| `npm run budget:js`     | Fails if the first-load JavaScript of a built page exceeds its budget         |
+| `npm run lighthouse`    | Lighthouse CI on `/en`, `/pt` and `/es` with mobile budgets                   |
 
 ## Project structure
 
 ```
 src/
-  app/          Routes only: layouts, pages and metadata files
+  app/          Routes only: layout, page, metadata routes (OG image, sitemap, robots)
   components/   Shared building blocks (ui, layout, media, brand, effects)
-  features/     One folder per page section; a feature never imports another feature
-  content/      Locale-agnostic facts (projects, roles, stack) and the generated asset manifest
-  i18n/         Locale config and typed dictionaries
+  features/     One folder per page section, each owning its pieces:
+    <section>/
+      <Section>.tsx   composes the section (server component)
+      parts/          the section's own components
+      content.ts      locale-agnostic facts (dates, links, tags, design frames)
+      background.ts   its shader settings from the design
+      *.test.tsx      its render tests
+  content/      Site-wide facts (contact, technology logos) and the generated asset manifest
+  i18n/         Locale config, typed dictionaries, negotiation and metadata builders
   lib/          Framework-agnostic utilities (env validation, formatting, class names)
-  styles/       Design tokens and global styles
-scripts/        Tooling (asset scan, asset pipeline)
-tests/          End-to-end specs and test setup
+  styles/       Design tokens, fluid scaling and global styles
+scripts/        Tooling (asset pipeline, asset scan, JS budget)
+tests/
+  e2e/          End-to-end, accessibility and SEO specs (Playwright + axe)
+  fidelity/     The design-fidelity runner and its targets
+  unit/         Repository-wide guards
 ```
+
+A feature never imports another feature (an ESLint rule generated from the folder list enforces it), and only shared code lives outside `features/`.
+
+## Architecture
+
+```
+                       Accept-Language
+  visitor ──► /  ──────────────────────► 307 /en | /pt | /es        (Route Handler, no-store)
+               │
+               ▼
+        /[lang]  statically prerendered per locale (Cache Components)
+          ├─ root layout: <html lang>, metadata, JSON-LD
+          ├─ server components: every section, all copy from typed dictionaries
+          └─ client islands: navbar (active section, menus), back-to-top, shader canvases
+               │
+               ├─ images / logos / PDFs ──► cdn.aysllan.com  (S3 + CloudFront, hashed, immutable)
+               └─ fonts ──► self-hosted at build time
+
+  AWS Amplify (SSR compute) builds and serves main; GitHub Actions runs the quality gates.
+```
+
+Almost everything renders on the server. The browser receives HTML plus small client islands: the navbar's interactive parts, the back-to-top link and one WebGL canvas per section that is mounted only near the viewport and released when it scrolls away.
+
+## Key decisions
+
+| Decision      | Chosen                                                      | Alternatives considered                    | Why                                                                                                                       |
+| ------------- | ----------------------------------------------------------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
+| Rendering     | Static prerender per locale with Cache Components           | Fully dynamic SSR; static export           | Instant first byte from the CDN edge, while keeping a Route Handler for language negotiation and server-only dictionaries |
+| Localization  | Typed dictionaries + `next/root-params`                     | i18n libraries (next-intl, i18next)        | Three languages and no runtime switching: the type system already guarantees parity, with zero client JavaScript          |
+| Images        | Pre-optimized at upload, `<picture>` with manifest `srcset` | `next/image` optimizer                     | No image processing on Amplify compute, deterministic URLs, immutable caching                                             |
+| Styling       | Tailwind v4 with the default theme removed                  | CSS Modules; CSS-in-JS                     | Design tokens become the only vocabulary; no runtime styling cost                                                         |
+| Fluid layout  | `--dpx` anchored at 390 / 834 / 1440                        | Breakpoint-only sizes; `clamp()` per value | Exact at the designed widths and proportional in between, written in design values                                        |
+| Backgrounds   | One WebGL fragment shader per section, mounted on demand    | Video loops; static images                 | Matches the design's shader fills, a few KB, paused off-screen and under reduced motion                                   |
+| Class merging | `tailwind-merge` on the server, `clsx` in client components | One helper everywhere                      | Keeps ~9 KB of merge logic out of the browser bundle                                                                      |
+
+## SEO and social
+
+`generateMetadata` builds each locale's head: localized title and description, canonical and `hreflang` alternates with `x-default`, Open Graph and Twitter cards and CDN icons. Each locale gets its own Open Graph image, rendered at build time from the hero headline with Google Fonts subsets fetched during the build. `sitemap.xml` lists the three languages with their alternates, `robots.txt` allows crawling only in production, and `Person` and `WebSite` structured data are typed with `schema-dts`.
+
+## Testing strategy
+
+| Layer           | What it proves                                                                                                                                      | Tools                                      |
+| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ |
+| Static          | Formatting, lint (zero warnings), strict types, feature boundaries, no inline copy                                                                  | Prettier, ESLint, TypeScript               |
+| Unit            | Utilities, i18n (parity, placeholders, negotiation), metadata, timeline geometry, the asset pipeline, component render tests                        | Vitest, Testing Library                    |
+| End to end      | Navigation, menus, language switching, every section's behavior, SEO head, no-JS render, reflow at 320px and 200% zoom, console and network hygiene | Playwright in Chromium, Firefox and WebKit |
+| Accessibility   | axe across 3 languages × 3 layouts with the menu open and closed, plus a pixel-sampling contrast check for text over the shaders                    | axe-core, Playwright                       |
+| Design fidelity | Every section at 390, 834 and 1440 and every component, compared with the design exports: box within ±2px and at most 5% of pixels differing        | Playwright, pixelmatch                     |
+| Performance     | Lighthouse budgets on every locale and a first-load JavaScript budget                                                                               | Lighthouse CI, a build-output check        |
+
+Test renders (`NEXT_PUBLIC_RENDER_MODE=test`) freeze the shaders' clock and the practices marquee, so screenshots are deterministic.
 
 ## Design system
 
@@ -130,4 +193,6 @@ Experimental Next.js flags in use: `globalNotFound`, which provides the 404 page
 
 ## Quality gates
 
-Every push to `main` runs CI: formatting, linting, type checking, unit tests with coverage, the repository asset scan, a production build, and end-to-end tests in Chromium, Firefox and WebKit. The same checks run locally with `npm run verify` and `npm run test:e2e` before anything is pushed.
+Every push to `main` runs CI: formatting, linting, type checking, unit tests with coverage, the repository asset scan, a production build, end-to-end tests in Chromium, Firefox and WebKit, the first-load JavaScript budget and Lighthouse on every locale. The same checks run locally with `npm run verify`, `npm run test:e2e` and `npm run qa:fidelity` before anything is pushed.
+
+Budgets enforced in CI (Lighthouse, mobile, median of three runs): Accessibility 100, SEO 100, Best Practices ≥ 95, Performance ≥ 90, CLS < 0.05, TBT < 150 ms, LCP < 3.5 s under simulated throttling, and first-load JavaScript < 150 KB gzipped (React and the Next.js runtime account for ~115 KB of it).
