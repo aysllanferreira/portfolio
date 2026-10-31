@@ -90,6 +90,9 @@ jobs:
       - run: npm run build
       - run: npm run budget:js
       - run: npm run lighthouse
+      - name: Summarize Lighthouse runs
+        if: always()
+        run: node scripts/lighthouse-summary.mjs
       - uses: actions/upload-artifact@v5
         if: always()
         with:

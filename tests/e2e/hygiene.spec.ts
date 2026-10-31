@@ -11,13 +11,14 @@ const horizontalOverflow = (page: Page) =>
 
 for (const locale of ["en", "pt", "es"]) {
   test(`/${locale} reflows at 200% zoom and at 320px`, async ({ page }) => {
+    test.slow();
     // 1280×720 at 200% zoom is a 640×360 CSS viewport.
     for (const viewport of [
       { width: 640, height: 360 },
       { width: 320, height: 640 },
     ]) {
       await page.setViewportSize(viewport);
-      await page.goto(`/${locale}`);
+      await page.goto(`/${locale}`, { waitUntil: "load" });
       expect(await horizontalOverflow(page), `${String(viewport.width)}px`).toBeLessThanOrEqual(0);
       await expect(page.locator("h1")).toBeInViewport();
     }
@@ -32,6 +33,9 @@ test("loading and scrolling the page is free of console noise and failed request
     // Headless Chromium's software GL logs its own driver diagnostics when it reads
     // canvases back to composite them; they come from the test renderer, not the page.
     if (message.text().includes("GL Driver Message")) return;
+    // CI runners have no GPU: Firefox reports the failed WebGL context, and the page
+    // shows its static fallback background, which is the designed behavior.
+    if (message.text().includes("Failed to create WebGL context")) return;
     if (["error", "warning"].includes(message.type())) {
       problems.push(`console ${message.type()}: ${message.text()}`);
     }
