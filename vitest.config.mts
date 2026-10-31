@@ -39,7 +39,12 @@ export default defineConfig({
     coverage: {
       provider: "v8",
       include: ["src/lib/**", "src/i18n/**", "scripts/**"],
-      exclude: ["**/*.test.*", "scripts/**/cli.ts", "scripts/check-no-assets.ts"],
+      exclude: [
+        "**/*.test.*",
+        "scripts/**/cli.ts",
+        "scripts/check-no-assets.ts",
+        "scripts/check-js-budget.ts",
+      ],
       thresholds: { lines: 90 },
     },
   },

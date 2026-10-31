@@ -1,6 +1,7 @@
 "use client";
 
-import { cn } from "@/lib/cn";
+import { clsx as cn } from "clsx";
+
 import type { SectionId } from "@/lib/sections";
 
 import { useActiveSection } from "../active-section";

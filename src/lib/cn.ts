@@ -83,7 +83,11 @@ const twMerge = extendTailwindMerge<FluidClassGroup>({
   },
 });
 
-/** Composes class names and resolves Tailwind conflicts so the last utility wins. */
+/**
+ * Composes class names and resolves Tailwind conflicts so the last utility wins.
+ * Server components only: client components compose with plain `clsx` and avoid
+ * conflicting classes, which keeps tailwind-merge out of the browser bundle.
+ */
 export function cn(...inputs: ClassValue[]): string {
   return twMerge(clsx(inputs));
 }

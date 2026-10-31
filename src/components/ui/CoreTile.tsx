@@ -44,7 +44,8 @@ export function CoreTile({
     >
       <div className="flex items-start justify-between font-mono tracking-[0.5px] text-text-faint">
         <span className={cn("text-caption", featured && "text-accent")}>{number}</span>
-        <span className="text-[10px] uppercase">{category}</span>
+        {/* Muted rather than faint: it sits in the brightest corner of the brand tint. */}
+        <span className="text-[10px] text-text-muted uppercase">{category}</span>
       </div>
       <div className="flex h-[72px] items-center">
         <TechLogo name={logo} size={64} className="size-16" />

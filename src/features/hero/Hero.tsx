@@ -66,7 +66,7 @@ export async function Hero() {
           </div>
 
           <div className="flex flex-col gap-3 pt-1">
-            <p className="font-mono text-[11px] tracking-[1px] text-text-faint uppercase">
+            <p className="font-mono text-[11px] tracking-[1px] text-text-muted uppercase">
               {hero.shippedFor}
             </p>
             <ul className="flex flex-wrap gap-x-5 gap-y-2.5 tablet:gap-x-7">

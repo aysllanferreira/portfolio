@@ -19,7 +19,7 @@ export const pt = {
   brand: {
     name: "Aysllan Ferreira",
     shortName: "Aysllan",
-    homeLabel: "Aysllan Ferreira, voltar ao topo",
+    homeHint: "voltar ao topo",
   },
   nav: {
     label: "Principal",

@@ -1,9 +1,9 @@
 "use client";
 
+import { clsx as cn } from "clsx";
 import { ArrowUpRight, Menu, X } from "lucide-react";
 import { useRef } from "react";
 
-import { cn } from "@/lib/cn";
 import type { SectionId } from "@/lib/sections";
 
 import { useActiveSection } from "../active-section";

@@ -71,3 +71,28 @@ jobs:
           name: playwright-report-${{ matrix.browser }}
           path: playwright-report
           retention-days: 7
+
+  performance:
+    name: Performance (first-load JS budget, Lighthouse)
+    needs: verify
+    runs-on: ubuntu-latest
+    env:
+      # Audited as the production site, served locally, so SEO checks see an indexable page.
+      NEXT_PUBLIC_SITE_URL: http://localhost:3200
+      NEXT_PUBLIC_SITE_ENV: production
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npm run budget:js
+      - run: npm run lighthouse
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: lighthouse-reports
+          path: .lighthouseci/reports
+          retention-days: 7

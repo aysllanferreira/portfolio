@@ -40,12 +40,14 @@ export function Navbar({ locale, copy }: NavbarProps) {
   }));
 
   const brandLink = (
-    <a href="#top" aria-label={brand.homeLabel} className="flex items-center gap-3">
+    // The visible name and status stay part of the link name; the hint is added after them.
+    <a href="#top" className="flex items-center gap-3">
       <Monogram size="md" />
       <span className="flex flex-col gap-[3px]">
         <span className="text-body font-semibold text-text-primary">{brand.name}</span>
         <Status>{nav.availability}</Status>
       </span>
+      <span className="sr-only">{`, ${brand.homeHint}`}</span>
     </a>
   );
 
@@ -114,9 +116,10 @@ export function Navbar({ locale, copy }: NavbarProps) {
 
         {/* Mobile: short brand · language menu + menu */}
         <div data-navbar="mobile" className="flex items-center justify-between tablet:hidden">
-          <a href="#top" aria-label={brand.homeLabel} className="flex items-center gap-2.5">
+          <a href="#top" className="flex items-center gap-2.5">
             <Monogram size="sm" />
             <span className="text-body font-semibold text-text-primary">{brand.shortName}</span>
+            <span className="sr-only">{`, ${brand.homeHint}`}</span>
           </a>
           <div className="flex items-center gap-2">
             <LanguageMenu label={nav.language.label} current={locale} options={languages} />

@@ -19,11 +19,23 @@ function cssNameFor(variable: string): string {
   return `color-${variable}`;
 }
 
+/**
+ * Deliberate, reviewed departures from the design file. Each must say why; any other
+ * difference from Pencil fails the test.
+ */
+const deviations: Record<string, { value: string; reason: string }> = {
+  "text-faint": {
+    value: "#8e8e9c",
+    reason: "#7c7c8a fell below 4.5:1 for small labels on tinted panels and shader glow",
+  },
+};
+
 describe("design tokens", () => {
   const entries = Object.entries(pencil);
 
   it.each(entries.filter(([, v]) => v.type === "color"))("color %s matches Pencil", (name, v) => {
-    expect(declared(cssNameFor(name))?.toLowerCase()).toBe(String(v.value).toLowerCase());
+    const expected = deviations[name]?.value ?? String(v.value);
+    expect(declared(cssNameFor(name))?.toLowerCase()).toBe(expected.toLowerCase());
   });
 
   it.each(entries.filter(([n, v]) => v.type === "number" && !n.startsWith("space-")))(

@@ -23,7 +23,7 @@ const color = {
   bg: "#0a0a0f",
   primary: "#f5f5f7",
   muted: "#b4b4c0",
-  faint: "#7c7c8a",
+  faint: "#8e8e9c",
   accent: "#a493ff",
   border: "#272733",
 };

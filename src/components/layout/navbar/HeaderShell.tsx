@@ -1,8 +1,7 @@
 "use client";
 
+import { clsx as cn } from "clsx";
 import { useEffect, useState } from "react";
-
-import { cn } from "@/lib/cn";
 
 import type { ReactNode } from "react";
 
@@ -25,8 +24,8 @@ export function HeaderShell({ children }: { children: ReactNode }) {
       data-scrolled={scrolled}
       className={cn(
         "fixed inset-x-0 top-0 z-50 pt-4 tablet:pt-6 desktop:pt-7",
-        "before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:-z-10 before:h-[calc(100%+24px)] before:bg-linear-to-b before:from-bg before:via-bg/85 before:to-transparent before:opacity-0 before:transition-opacity before:duration-300",
-        scrolled && "before:opacity-100",
+        "before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:-z-10 before:h-[calc(100%+24px)] before:bg-linear-to-b before:from-bg before:via-bg/85 before:to-transparent before:transition-opacity before:duration-300",
+        scrolled ? "before:opacity-100" : "before:opacity-0",
       )}
     >
       {children}

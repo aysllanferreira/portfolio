@@ -1,7 +1,8 @@
 "use client";
 
+import { clsx as cn } from "clsx";
+
 import type { Locale } from "@/i18n/config";
-import { cn } from "@/lib/cn";
 
 import { useActiveSection } from "../active-section";
 import { localeHref, type LanguageOption } from "./language";
