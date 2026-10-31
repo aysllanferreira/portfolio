@@ -9,9 +9,18 @@ const shapes = {
   md: "h-4 w-6 rounded-[3px]",
   /** 21×14, used in role rows. */
   sm: "h-[14px] w-[21px] rounded-[3px]",
+  /** 18×12, used in chips. */
+  xs: "h-3 w-[18px] rounded-[2px]",
   /** 16×16 circle, used in the language switcher. */
   round: "size-4 rounded-full",
 } as const;
+
+const sizes: Record<keyof typeof shapes, string> = {
+  md: "24px",
+  sm: "21px",
+  xs: "18px",
+  round: "16px",
+};
 
 interface FlagProps {
   country: CountryCode;
@@ -26,7 +35,7 @@ export function Flag({ country, label = "", shape = "md", className }: FlagProps
     <AssetImage
       name={`flags/${country}`}
       alt={label}
-      sizes={shape === "sm" ? "21px" : shape === "round" ? "16px" : "24px"}
+      sizes={sizes[shape]}
       className={cn("shrink-0", className)}
       imgClassName={cn(
         "size-full object-cover outline outline-1 -outline-offset-1 outline-white/[0.13]",

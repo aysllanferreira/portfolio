@@ -353,6 +353,31 @@ export const en = {
       "Mentoring",
     ],
   },
-  about: {},
+  about: {
+    eyebrow: "04 — About me",
+    outline: "About",
+    title: { before: "Hi, I'm ", accent: "Aysllan.", after: "" },
+    bio: [
+      "I'm a senior software engineer from São Paulo. For 5+ years I've taken products from the first client call to production, shipping 30+ MVPs for teams in the US, Canada, Europe and Brazil.",
+      "I care about the unglamorous parts: tests, documentation, and infrastructure that's still healthy years later. Software is a garden, not a house you hand over the keys to.",
+      "And I teach. I tutor 20+ developers in Pinely's Engineering Sync, built automated graders used by 3,000+ Trybe students, and give talks on cloud computing.",
+    ],
+    valuesLabel: "What I value",
+    values: [
+      { title: "Do it very well", description: "Craft and care, down to the tests and docs." },
+      {
+        title: "Own it end to end",
+        description: "From the pre-sales call to the production deploy.",
+      },
+      { title: "Teach and multiply", description: "Make the people around me better." },
+      {
+        title: "Never stop learning",
+        description: "PT, EN and ES, now studying Russian, Italian and Japanese.",
+      },
+    ],
+    motto: "Just start, and when you start, don't give up.",
+    roleLine: "Senior Software Engineer · 5+ years",
+    portraitAlt: "Aysllan Ferreira in a white shirt and glasses, arms crossed, smiling",
+  },
   contact: {},
 };

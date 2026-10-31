@@ -366,6 +366,34 @@ export const pt = {
       "Mentoria",
     ],
   },
-  about: {},
+  about: {
+    eyebrow: "04 — Sobre mim",
+    outline: "Sobre",
+    title: { before: "Oi, eu sou o ", accent: "Aysllan.", after: "" },
+    bio: [
+      "Sou engenheiro de software sênior, de São Paulo. Há mais de 5 anos levo produtos da primeira conversa com o cliente até a produção, com 30+ MVPs entregues para times nos EUA, Canadá, Europa e Brasil.",
+      "Eu cuido das partes pouco glamorosas: testes, documentação e uma infraestrutura que continua saudável anos depois. Software é um jardim, não uma casa que você entrega com a chave.",
+      "E eu ensino. Sou tutor de 20+ desenvolvedores no Engineering Sync da Pinely, criei corretores automáticos usados por 3.000+ alunos da Trybe e dou palestras sobre computação em nuvem.",
+    ],
+    valuesLabel: "O que eu valorizo",
+    values: [
+      {
+        title: "Fazer muito bem feito",
+        description: "Capricho e cuidado, até nos testes e na documentação.",
+      },
+      {
+        title: "Assumir de ponta a ponta",
+        description: "Da reunião de pré-vendas ao deploy em produção.",
+      },
+      { title: "Ensinar e multiplicar", description: "Fazer as pessoas ao meu redor crescerem." },
+      {
+        title: "Nunca parar de aprender",
+        description: "PT, EN e ES, e agora estudando russo, italiano e japonês.",
+      },
+    ],
+    motto: "Apenas comece, e quando começar, não desista.",
+    roleLine: "Engenheiro de Software Sênior · 5+ anos",
+    portraitAlt: "Aysllan Ferreira de camisa branca e óculos, de braços cruzados, sorrindo",
+  },
   contact: {},
 } satisfies Dictionary;

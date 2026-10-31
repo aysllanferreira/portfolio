@@ -2,7 +2,7 @@ import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
 /** Every built section passes axe at mobile and desktop widths. */
-const sections = ["#top", "#work", "#projects", "#experience", "#stack"];
+const sections = ["#top", "#work", "#projects", "#experience", "#stack", "#about"];
 
 for (const width of [390, 1440]) {
   for (const section of sections) {
