@@ -54,9 +54,26 @@ for (const target of targets) {
       await page.addStyleTag({ content: "header { visibility: hidden; }" });
     }
 
-    const capture = await page.locator(target.selector).screenshot({
-      animations: "disabled",
-    });
+    const capture = target.through
+      ? await page.screenshot({
+          animations: "disabled",
+          fullPage: true,
+          clip: await page.evaluate(
+            ([from, to]) => {
+              const start = document.querySelector(from)?.getBoundingClientRect();
+              const end = document.querySelector(to)?.getBoundingClientRect();
+              if (!start || !end) throw new Error(`missing ${from} or ${to}`);
+              return {
+                x: start.left,
+                y: start.top + window.scrollY,
+                width: start.width,
+                height: end.bottom - start.top,
+              };
+            },
+            [target.selector, target.through] as const,
+          ),
+        })
+      : await page.locator(target.selector).screenshot({ animations: "disabled" });
     writeFileSync(resolve(root, "actual", `${target.name}.png`), capture);
 
     const comparison = compareImages(capture, readFileSync(reference), target.designBox);

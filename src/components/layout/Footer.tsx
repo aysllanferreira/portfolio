@@ -63,8 +63,10 @@ export function Footer({ copy, year }: FooterProps) {
 
           <nav aria-label={footer.linksLabel}>
             <div className="flex flex-col gap-3 tablet:flex-row tablet:gap-8">
-              <ul className="flex flex-wrap gap-x-5 gap-y-3 tablet:gap-x-8">{sectionLinks}</ul>
-              <ul className="flex gap-x-5 tablet:gap-x-8">{profileLinks}</ul>
+              <ul className="flex flex-wrap gap-x-5 gap-y-3 text-caption leading-4 tablet:gap-x-8">
+                {sectionLinks}
+              </ul>
+              <ul className="flex gap-x-5 text-caption leading-4 tablet:gap-x-8">{profileLinks}</ul>
             </div>
           </nav>
 

@@ -2,6 +2,7 @@ import { cn } from "@/lib/cn";
 
 const tones = {
   violet: "bg-[radial-gradient(closest-side,#a493ff1f,#a493ff00)]",
+  bright: "bg-[radial-gradient(closest-side,#a493ff26,#a493ff00)]",
   cool: "bg-[radial-gradient(closest-side,#1d3fa833,#1d3fa800)]",
 } as const;
 

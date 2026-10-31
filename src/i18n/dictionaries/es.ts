@@ -11,6 +11,7 @@ export const es = {
     skipToContent: "Saltar al contenido",
     opensInNewTab: "se abre en una pestaña nueva",
     downloadsPdf: "descarga un PDF",
+    opensMailApp: "abre tu app de correo",
   },
   brand: {
     name: "Aysllan Ferreira",
@@ -408,5 +409,24 @@ export const es = {
     roleLine: "Ingeniero de Software Sénior · 5+ años",
     portraitAlt: "Aysllan Ferreira con camisa blanca y gafas, de brazos cruzados, sonriendo",
   },
-  contact: {},
+  contact: {
+    eyebrow: "Hablemos",
+    headline: { before: "Construyamos algo\nque ", accent: "perdure.", after: "" },
+    pitch:
+      "Abierto a puestos sénior de ingeniería y a proyectos freelance seleccionados. Vivo en São Paulo y trabajo en remoto con equipos de EE. UU., Canadá y Europa.",
+    cta: { linkedin: "Escríbeme en LinkedIn", resume: "Descargar currículum" },
+    facts: {
+      localTime: { label: "Hora local", value: "São Paulo · {offset}" },
+      languages: { label: "Idiomas", value: "PT · EN · ES" },
+      works: { label: "Trabajo", value: "En remoto, desde cualquier lugar" },
+    },
+    links: {
+      label: "Dónde encontrarme",
+      email: "Correo",
+      linkedin: "LinkedIn",
+      github: "GitHub",
+      coverLetter: "Carta de presentación",
+      coverLetterValue: "Por qué encajaría muy bien (PDF)",
+    },
+  },
 } satisfies Dictionary;

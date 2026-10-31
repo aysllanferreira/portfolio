@@ -13,6 +13,8 @@ export interface FidelityTarget {
   height?: number;
   /** The node's own box in the design; exports include room for shadows, which is cropped away. */
   designBox?: DesignBox;
+  /** Extends the capture down to the bottom of this element (the design draws it in the frame). */
+  through?: string;
   /** Reviewed by eye instead of failing on pixels, with the reason it cannot match exactly. */
   exception?: string;
 }
@@ -28,6 +30,9 @@ const sections = [
   ["about", "#about"],
   ["contact", "#contact"],
 ] as const;
+
+/** Section frames that also draw the element after them: the contact frame includes the footer. */
+const sectionsThrough: Partial<Record<string, string>> = { contact: "footer" };
 
 /** Components rendered in isolation by the QA harness, compared with their design definitions. */
 const components = {
@@ -97,6 +102,7 @@ export const targets: FidelityTarget[] = [
       path: "/en",
       selector,
       width,
+      ...(sectionsThrough[name] ? { through: sectionsThrough[name] } : {}),
     })),
   ),
 ];

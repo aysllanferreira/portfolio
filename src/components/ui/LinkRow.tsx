@@ -12,6 +12,8 @@ interface LinkRowProps {
   /** Localized note announced after the link name: "opens in a new tab", "downloads a PDF". */
   hint?: string;
   newTab?: boolean;
+  /** Trailing icon; a download icon marks documents. */
+  trailingIcon?: LucideIcon;
   className?: string;
 }
 
@@ -23,6 +25,7 @@ export function LinkRow({
   href,
   hint,
   newTab = false,
+  trailingIcon: TrailingIcon = ArrowUpRight,
   className,
 }: LinkRowProps) {
   return (
@@ -30,7 +33,7 @@ export function LinkRow({
       href={href}
       {...(newTab ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       className={cn(
-        "group flex items-center gap-[18px] py-[22px] shadow-[inset_0_1px_0_var(--color-border)] first:shadow-none",
+        "group flex items-center gap-3 py-[18px] shadow-[inset_0_1px_0_var(--color-border)] first:shadow-none tablet:gap-[18px] tablet:py-[22px]",
         className,
       )}
     >
@@ -46,7 +49,7 @@ export function LinkRow({
         </span>
       </span>
       {hint && <span className="sr-only"> ({hint})</span>}
-      <ArrowUpRight
+      <TrailingIcon
         aria-hidden
         className="size-[18px] shrink-0 text-text-muted transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-accent"
         strokeWidth={2}

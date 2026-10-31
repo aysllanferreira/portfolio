@@ -12,6 +12,7 @@ export const en = {
     skipToContent: "Skip to content",
     opensInNewTab: "opens in a new tab",
     downloadsPdf: "downloads a PDF",
+    opensMailApp: "opens your email app",
   },
   brand: {
     name: "Aysllan Ferreira",
@@ -379,5 +380,24 @@ export const en = {
     roleLine: "Senior Software Engineer · 5+ years",
     portraitAlt: "Aysllan Ferreira in a white shirt and glasses, arms crossed, smiling",
   },
-  contact: {},
+  contact: {
+    eyebrow: "Get in touch",
+    headline: { before: "Let's build something\nthat ", accent: "lasts.", after: "" },
+    pitch:
+      "Open to senior engineering roles and select freelance projects. Based in São Paulo, working remotely with teams in the US, Canada and Europe.",
+    cta: { linkedin: "Message me on LinkedIn", resume: "Download résumé" },
+    facts: {
+      localTime: { label: "Local time", value: "São Paulo · {offset}" },
+      languages: { label: "Languages", value: "PT · EN · ES" },
+      works: { label: "Works", value: "Remote, worldwide" },
+    },
+    links: {
+      label: "Ways to reach me",
+      email: "Email",
+      linkedin: "LinkedIn",
+      github: "GitHub",
+      coverLetter: "Cover letter",
+      coverLetterValue: "Why I'd be a great fit (PDF)",
+    },
+  },
 };
